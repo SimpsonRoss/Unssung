@@ -1,0 +1,6 @@
+.SideNavBox {
+  background-color: grey;
+  border-radius: 2vmin;
+  flex-grow: 1;
+  padding: 1vmin;
+}

@@ -1,29 +1,46 @@
+// src/pages/App/App.jsx
+
 import { useState } from 'react';
 import { getUser } from '../../utilities/users-service';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import AuthPage from '../AuthPage/AuthPage';
-import NewOrderPage from '../NewOrderPage/NewOrderPage';
-import OrderHistoryPage from '../OrderHistoryPage/OrderHistoryPage';
-import NavBar from '../../components/NavBar/NavBar';
+import AllGamesPage from '../AllGamesPage/AllGamesPage';
+import ProfilePage from '../ProfilePage/ProfilePage';
+import Dash from '../DashPage/DashPage';
+
+import SideNav from '../../components/SideNav/SideNav';
+import QuickNav from '../../components/QuickNav/QuickNav';
 
 
 export default function App() {
   const [user, setUser] = useState(getUser());
 
   return (
-    <main>
-      { user ? 
-      <>
-        <NavBar user={user.name} setUser={setUser} />
-        <Routes>
-          <Route path="/orders" element={<OrderHistoryPage />} />
-          <Route path="/orders/new" element={<NewOrderPage />} />
-        </Routes> 
-      </>
+    <>
+     { user ?  
+      <main className='MainApp'>
+        
+        <>
+          <aside>
+            <QuickNav />
+            <SideNav user={user} setUser={setUser} />
+          </aside>
+          <section>
+            <Routes>
+              <Route path="/dash" element={<Dash />} />
+              <Route path="/games" element={<AllGamesPage />} />
+              <Route path="/account" element={<ProfilePage user={user} setUser={setUser} />} />
+            </Routes>
+          </section>
+        </>
+      </main>
       : 
-      <AuthPage setUser={setUser} /> }
-    </main>
+      <AuthPage setUser={setUser} /> } 
+      <footer className='Footer'>
+        <p>footer</p>
+      </footer>
+    </>
   );
 }
 

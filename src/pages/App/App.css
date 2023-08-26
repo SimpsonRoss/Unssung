@@ -1,38 +1,51 @@
-.App {
-  text-align: center;
+.MainApp {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 2fr 6fr;
+  grid-template-rows: 1fr;
+  background-color: black;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.MainApp aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: left;
+  margin: 3vmin 2vmin;
+  gap: 2rem ;
+
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.MainApp section {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  margin: 3vmin 2vmin;
+  background-color: grey;
+  border-radius: 2vmin;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Dash-Container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  flex-grow: 1;
+}
+
+.Dash-Row {
+  display: flex;
+  flex-direction: row;
+  margin: 1vmin;
+  gap: 1vmin;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;  /* Ensures this element doesn't grow beyond its container */
+}
+
+.Dash-Row > * {
+  flex-shrink: 0;  /* Prevents items from shrinking */
+}
+.Footer {
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
