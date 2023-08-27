@@ -1,8 +1,9 @@
 // src/pages/App/App.jsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getUser } from '../../utilities/users-service';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { fetchUserGames } from '../../utilities/games-api';
 import './App.css';
 import AuthPage from '../AuthPage/AuthPage';
 import AllGamesPage from '../AllGamesPage/AllGamesPage';
@@ -11,10 +12,27 @@ import Dash from '../DashPage/DashPage';
 
 import SideNav from '../../components/SideNav/SideNav';
 import QuickNav from '../../components/QuickNav/QuickNav';
+import GameDetailPage from '../GameDetailPage/GameDetailPage';
 
 
 export default function App() {
   const [user, setUser] = useState(getUser());
+  const [games, setGames] = useState([]);
+
+
+  useEffect(() => {
+    async function getGames() {
+      if (user) {
+        const fetchedGames = await fetchUserGames().catch((e) => console.error(e));
+        setGames(fetchedGames);
+      } else {
+        console.log('no user to getGames from');
+      }
+      
+    }
+    getGames();
+  }, [user]);
+  
 
   return (
     <>
@@ -29,8 +47,13 @@ export default function App() {
           <section>
             <Routes>
               <Route path="/dash" element={<Dash />} />
-              <Route path="/games" element={<AllGamesPage />} />
+              <Route path="/games" element={<AllGamesPage games={games} setGames={setGames} />} />
+              <Route
+              path="/games/:id"
+              element={<GameDetailPage games={games} setGames={setGames} />}
+              />
               <Route path="/account" element={<ProfilePage user={user} setUser={setUser} />} />
+
             </Routes>
           </section>
         </>

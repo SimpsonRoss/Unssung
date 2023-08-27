@@ -11,8 +11,10 @@ module.exports = {
   refreshAccessToken,
 };
 
+// Hardcoded user ID for testing
+// const USER_ID = '64e8b0111ed7711eef7ec075';
+
 function initiateSpotifyLogin(req, res) {
-  console.log('Initiating Spotify login. req.user:', req.user);
   const scopes = 'user-read-private user-library-read playlist-read-private user-top-read';
   res.redirect('https://accounts.spotify.com/authorize' +
     '?client_id=' + process.env.SPOTIFY_CLIENT_ID +
@@ -24,7 +26,7 @@ function initiateSpotifyLogin(req, res) {
 };
 
 async function handleSpotifyRedirect(req, res) {
-  console.log('Handling Spotify redirect. req.user:', req.user);
+  console.log('Handling Spotify redirect. req.user:', req.session.userId);
   const { code } = req.query;
 
   if (!code) {
@@ -48,10 +50,18 @@ async function handleSpotifyRedirect(req, res) {
 
     const { access_token, refresh_token, expires_in } = response.data;
 
-    if (req.user) {
+    // commenting out whilst testing
+    // if (req.user) {
+    //   const expirationTime = new Date().getTime() + expires_in * 1000;
+    //   console.log('Updating user ' + req.user._id + ' with Spotify tokens');
+
+    // Using req.session.userId instead of req.user._id for testing, because I'm having trouble accessing req.user._id
+    // from the JWT token once spotify redirects back, so instead I apply the id to the session at login
+    if (true) {
       const expirationTime = new Date().getTime() + expires_in * 1000;
+      console.log('Updating user ' + req.session.userId + ' with Spotify tokens');
       
-      await User.findByIdAndUpdate(req.user._id, {
+      await User.findByIdAndUpdate(req.session.userId, {
         spotifyAccessToken: access_token,
         spotifyRefreshToken: refresh_token,
         spotifyTokenExpiration: expirationTime

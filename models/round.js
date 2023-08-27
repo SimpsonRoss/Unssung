@@ -1,5 +1,8 @@
 // models/round.js
 
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
 const roundStatus = ['SongPick', 'SongScore', 'RevealScore', 'Finished'];
 
 const roundSchema = new Schema({
