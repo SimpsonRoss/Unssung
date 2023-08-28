@@ -30,6 +30,7 @@ app.use(require('./config/checkToken'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/spotify', require('./routes/api/spotify'));
 app.use('/api/games', require('./routes/api/games'));
+app.use('/api/rounds', require('./routes/api/rounds'));
 
 // "catch-all" route
 app.get('/*', function(req, res) {

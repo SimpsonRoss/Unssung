@@ -1,0 +1,14 @@
+.RoundCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25vmin;
+  height: 20vmin;
+  background-color: lightgray;
+  border-radius: 2vmin;
+  padding: 1vmin;
+}
+
+.RoundCard * {
+margin: .5rem auto; 
+}

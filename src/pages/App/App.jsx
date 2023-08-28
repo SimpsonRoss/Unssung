@@ -13,6 +13,7 @@ import Dash from '../DashPage/DashPage';
 import SideNav from '../../components/SideNav/SideNav';
 import QuickNav from '../../components/QuickNav/QuickNav';
 import GameDetailPage from '../GameDetailPage/GameDetailPage';
+import RoundDetailPage from '../RoundDetailPage/RoundDetailPage';
 
 
 export default function App() {
@@ -51,6 +52,10 @@ export default function App() {
               <Route
               path="/games/:id"
               element={<GameDetailPage games={games} setGames={setGames} />}
+              />
+              <Route
+              path="/rounds/:id"
+              element={<RoundDetailPage user={user} />}
               />
               <Route path="/account" element={<ProfilePage user={user} setUser={setUser} />} />
 

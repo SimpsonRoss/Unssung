@@ -10,10 +10,11 @@ const gameSchema = new Schema({
     title: { type: String, required: true },
     players: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
     status: { type: String, enum: gameStatus, default: 'New' },
-    roundCount: { type: Number, required: true },
-    roundDuration: { type: Number, required: true },
+    roundCount: { type: Number, required: true, min: 1 },
+    roundDuration: { type: Number, required: true, min: 1 },
+    roundsArray: [{ type: Schema.Types.ObjectId, ref: 'Round', default: [] }],
     uniqueCode: { type: String, required: true },
-    topTracks: [{ type: String }], 
+    topTracks: [{ type: Array, default: [] }], 
     currentRound: { type: Schema.Types.ObjectId, ref: 'Round' },
 }, { timestamps: true });
 
