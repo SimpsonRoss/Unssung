@@ -7,6 +7,7 @@ const User = require('../../models/user');
 module.exports = {
   create,
   login,
+  getUser,
 };
 
 async function login(req, res) {
@@ -33,6 +34,18 @@ async function create(req, res) {
     res.json(token);
   } catch (err) {
     res.status(400).json(err);
+  }
+}
+
+async function getUser(req, res) {
+  try {
+    const user = await User.findById(req.params.id).select('name'); // Fetch only the 'name' field
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Something went wrong' });
   }
 }
 

@@ -91,7 +91,35 @@ exports.submitScores = async (req, res) => {
       }
     });
 
+    // Count the number of scores submitted for the first song
+    const firstSong = round.trackSubmissions[0];
+    const numScoresForFirstSong = firstSong ? firstSong.scores.length : 0;
+
+    // Check if all players have submitted their scores
+    if (numScoresForFirstSong === round.players.length) {
+      round.status = 'RevealScore';
+    }
+
     await round.save();
+    res.status(200).json(round);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+exports.revealScores = async (req, res) => {
+  const { id } = req.params; // Round ID
+
+  try {
+    const round = await Round.findById(id);
+    
+    if (round.status !== 'RevealScore') {
+      return res.status(400).json({ message: 'Cannot reveal scores at this stage' });
+    }
+    
+    round.status = 'Finished';
+    await round.save();
+    
     res.status(200).json(round);
   } catch (error) {
     res.status(400).json({ error });

@@ -38,6 +38,17 @@ export default function RoundDetailPage({user}) {
 
   const userHasSubmitted = Boolean(userSubmission);
 
+
+  const revealScores = async () => {
+    try {
+      await axios.put(`/api/rounds/${id}/revealScores`); 
+      const response = await axios.get(`/api/rounds/${id}`);
+      setRound(response.data);
+    } catch (error) {
+      console.error(`Error revealing scores: ${error}`);
+    }
+  };
+
   // Convert timestamps to Date objects
   const startDate = new Date(round.createdAt);
   const songPickDeadline = new Date(round.songPickDeadline);
@@ -61,6 +72,27 @@ export default function RoundDetailPage({user}) {
       }
       {
         (round.status === 'SongScore') && <SongScoreForm trackSubmissions={round.trackSubmissions} userId={user._id} roundId={id}  />
+      }
+
+      {
+        (round.status === 'RevealScore') && <button onClick={revealScores}>Reveal Scores</button>
+      }
+      {
+        (round.status === 'Finished') &&
+        <div>
+          <h2>Final Scores:</h2>
+          {
+            round.trackSubmissions.sort((a, b) => {
+              const totalA = a.scores.reduce((acc, score) => acc + score, 0);
+              const totalB = b.scores.reduce((acc, score) => acc + score, 0);
+              return totalB - totalA;
+            }).map(submission => (
+              <p key={submission.songId}>
+                {submission.songId} - Player: {submission.player === userSubmission.player ? "YOU" : submission.player} - Total Score: {submission.scores.reduce((acc, score) => acc + score, 0)}
+              </p>
+            ))
+          }
+        </div>
       }
     </div>
   );

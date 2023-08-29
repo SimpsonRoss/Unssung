@@ -12,6 +12,6 @@ router.post('/:id/submit', roundController.submitSong);
 
 router.post('/:id/submitScores', roundController.submitScores);
 
-
+router.put('/:id/revealScores', roundController.revealScores);
 
 module.exports = router;
