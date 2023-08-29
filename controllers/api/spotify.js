@@ -1,6 +1,7 @@
 // controllera/api/spotify.js
 
 const axios = require('axios');
+const fetch = require('node-fetch');
 const qs = require('qs');
 const User = require('../../models/user');
 
@@ -9,13 +10,15 @@ module.exports = {
   initiateSpotifyLogin,
   handleSpotifyRedirect,
   refreshAccessToken,
+  getTopTracks,
+  createPlaylistAPI
 };
 
 // Hardcoded user ID for testing
 // const USER_ID = '64e8b0111ed7711eef7ec075';
 
 function initiateSpotifyLogin(req, res) {
-  const scopes = 'user-read-private user-library-read playlist-read-private user-top-read';
+  const scopes = 'user-read-private user-library-read playlist-read-private user-top-read playlist-modify-public playlist-modify-private streaming user-read-email';
   res.redirect('https://accounts.spotify.com/authorize' +
     '?client_id=' + process.env.SPOTIFY_CLIENT_ID +
     '&client_secret=' + process.env.SPOTIFY_CLIENT_SECRET +
@@ -110,3 +113,75 @@ async function refreshAccessToken(req, res) {
     res.status(400).send('Failed to refresh Spotify access token.');
   }
 }
+
+
+async function getTopTracks(req, res) {
+  // console.log('Getting top tracks. req.session.userId:', req.session.userId);
+  // TEMPORARILY - hardcoding user ID for testing
+  const user = await User.findById('64e8b0111ed7711eef7ec075');
+  if (!user) {
+    return res.status(400).send('User not found.');
+  }
+
+  const token = user.spotifyAccessToken;
+  // console.log('TOKEN:', token)
+  // console.log('USER:', user)
+
+  try {
+    const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5';
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (response.status !== 200) {
+      return res.status(response.status).send('Spotify API Error');
+    }
+
+    const data = await response.json();
+    res.status(200).send(data);
+    
+  } catch (error) {
+    console.error("Error fetching top tracks:", error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+async function createPlaylistAPI(req, res) {
+  const user = await User.findById('64e8b0111ed7711eef7ec075');
+  if (!user) {
+    return res.status(400).send('User not found.');
+  }
+
+  const token = user.spotifyAccessToken;
+  console.log('TOKEN from createPlaylistAPI:', token)
+  const { tracksUri } = req.body;
+  // console.log('tracksUri:', tracksUri)
+  try {
+    const { data: { id: user_id } } = await axios.get('https://api.spotify.com/v1/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    console.log('user_id:', user_id)
+    
+    const { data: playlist } = await axios.post(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
+      "name": "NEWWW PLAYLIST FROM APP",
+      "description": "HOLY SH*T THIS WORKED",
+      "public": true
+    }, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    await axios.post(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
+      uris: tracksUri
+    }, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    res.status(200).json({ playlist });
+  } catch (error) {
+    console.error("Spotify API error:", error.response ? error.response.data : error);
+    res.status(500).send('Internal Server Error');
+    }
+}
+

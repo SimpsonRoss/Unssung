@@ -31,7 +31,7 @@ async function create(req, res) {
 }
 
 async function fetchUserGames(req, res) {
-  console.log("fetchUserGames - req.user = ", req.user);
+  // console.log("fetchUserGames - req.user = ", req.user);
   try {
     const games = await Game.find({
       $or: [
@@ -40,7 +40,7 @@ async function fetchUserGames(req, res) {
       ]
     }).populate('owner').populate('players');  // Removed the 'allRoundsArray' and 'currentRound' parts
 
-    console.log("fetchUserGames - games = ", games);
+    // console.log("fetchUserGames - games = ", games);
 
     res.status(200).json(games);
   } catch (err) {

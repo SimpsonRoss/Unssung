@@ -49,6 +49,35 @@ export default function RoundDetailPage({user}) {
     }
   };
 
+  // const savePlaylistToSpotify = async () => {
+  //   // TEMPORARILY - adding hardcoded tracks for now
+  //   const tracksUri = [
+  //     'spotify:track:3vRQw2YQTzhNGvul0Cb7my','spotify:track:4LySqCK5ki8uqgu5MFFfCZ','spotify:track:3XXemjIqQleJMVtae2Vsb6','spotify:track:4zZKZl3uUJRSs2d11hdbXB','spotify:track:2EG9MUgdONcBkJz89sm0ec','spotify:track:2Il469OIMB21ZQQfpHtgPr','spotify:track:7urRCjsGZ8XpVRLO5LANhN','spotify:track:57B0ON91WpCglYhvJQRc0r','spotify:track:30HFe6UMIF451p0abseDsT','spotify:track:5kQQ3eAIsg5DGbikSHQ8qG'
+  //   ];
+  //   try {
+  //     const response = await axios.post('/api/spotify/create-playlist', { tracksUri });
+  //     console.log(`Created playlist ${response.data.name} with ID ${response.data.id}`);
+  //   } catch (error) {
+  //     console.error('Failed to create playlist:', error);
+  //   }
+  // };
+
+  const savePlaylistToSpotify = async () => {
+    // Dynamically collect the track URIs from the round's submissions
+    // const tracksUri = round.trackSubmissions.map(submission => submission.songId);
+
+    const tracksUri = [
+      'spotify:track:3vRQw2YQTzhNGvul0Cb7my','spotify:track:4LySqCK5ki8uqgu5MFFfCZ','spotify:track:3XXemjIqQleJMVtae2Vsb6','spotify:track:4zZKZl3uUJRSs2d11hdbXB','spotify:track:2EG9MUgdONcBkJz89sm0ec','spotify:track:2Il469OIMB21ZQQfpHtgPr','spotify:track:7urRCjsGZ8XpVRLO5LANhN','spotify:track:57B0ON91WpCglYhvJQRc0r','spotify:track:30HFe6UMIF451p0abseDsT','spotify:track:5kQQ3eAIsg5DGbikSHQ8qG'
+    ];
+    
+    try {
+      const response = await axios.post('http://localhost:5001/api/spotify/create-playlist-api', { tracksUri });
+      console.log(`Created playlist ${response.data.name} with ID ${response.data.id}`);
+    } catch (error) {
+      console.error('Round Detail Page - Failed to create playlist:', error);
+    }
+  };
+
   // Convert timestamps to Date objects
   const startDate = new Date(round.createdAt);
   const songPickDeadline = new Date(round.songPickDeadline);
@@ -72,6 +101,9 @@ export default function RoundDetailPage({user}) {
       }
       {
         (round.status === 'SongScore') && <SongScoreForm trackSubmissions={round.trackSubmissions} userId={user._id} roundId={id}  />
+      }
+      {
+        (round.status !== 'SongPick') && <button onClick={savePlaylistToSpotify}>Save to Spotify</button>
       }
 
       {

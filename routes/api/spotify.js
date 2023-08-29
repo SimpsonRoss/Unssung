@@ -9,5 +9,9 @@ const ensureLoggedIn = require('../../config/ensureLoggedIn');
 router.get('/login', spotifyCtrl.initiateSpotifyLogin);
 router.get('/redirect', spotifyCtrl.handleSpotifyRedirect);
 router.get('/refresh', spotifyCtrl.refreshAccessToken);
+router.get('/top-tracks', spotifyCtrl.getTopTracks);
+router.post('/create-playlist-api', spotifyCtrl.createPlaylistAPI);
+
+
 
 module.exports = router;

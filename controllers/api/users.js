@@ -15,6 +15,7 @@ async function login(req, res) {
     const user = await User.findOne({email: req.body.email});
     // attempting to add user id to a session it can be called later
     req.session.userId = user._id;
+    console.log('req.session.userId:', req.session.userId);
     if (!user) throw new Error();
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) throw new Error();

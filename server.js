@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
-const session = require('express-session'); // Add this line
+const cors = require('cors');
+const session = require('express-session');
 
 require('dotenv').config();
 // Connect to db after the dotenv above
@@ -13,7 +14,10 @@ const app = express();
 app.use(logger('dev'));
 app.use(express.json());
 
-// Add the session middleware here
+app.use(cors({
+  origin: 'http://localhost:3000' 
+}));
+
 app.use(session({
   secret: 'your-secret-key',
   resave: false,
