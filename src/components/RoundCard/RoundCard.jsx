@@ -30,7 +30,7 @@ export default function RoundCard({ id, idx }) {
   return (
     <Link to={`/rounds/${id}`}>
       <div className="RoundCard">
-        <h1>Round {idx}</h1>
+        <h3>Round {idx}</h3>
         <p>Status: {round.status}</p>
         <p>id: {id}</p>
       </div>

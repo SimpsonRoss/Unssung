@@ -47,7 +47,8 @@ export default function GameDetailPage({ games, setGames }) {
     try {
       const newRound = await axios.post('/api/rounds/create', {
         duration: game.roundDuration,
-        gameId: game._id
+        gameId: game._id,
+        players: game.players
       });
       // Temporarily calling this line below, just to clear the 'Start Round' button
       updateGame('start', {}); 

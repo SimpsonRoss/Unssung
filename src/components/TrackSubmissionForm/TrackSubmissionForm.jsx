@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function TrackSubmissionForm({ roundId, userId }) {
+export default function TrackSubmissionForm({ roundId, userId, onSuccess}) {
   const [songURL, setSongURL] = useState("");
 
   const handleSubmit = async (e) => {
@@ -9,6 +9,7 @@ export default function TrackSubmissionForm({ roundId, userId }) {
     try {
       await axios.post(`/api/rounds/${roundId}/submit`, { songURL, userId });
       console.log('song submitted')
+      onSuccess();
     } catch (error) {
       console.error(`Error submitting song: ${error}`);
     }

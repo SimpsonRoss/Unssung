@@ -10,5 +10,8 @@ router.get('/:id', roundController.getRoundById);
 
 router.post('/:id/submit', roundController.submitSong);
 
+router.post('/:id/submitScores', roundController.submitScores);
+
+
 
 module.exports = router;

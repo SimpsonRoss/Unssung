@@ -9,7 +9,7 @@ export default function GameCard(props) {
     <>
       <Link to={`/games/${props.id}`}>
         <div className="GameCard">
-          <h1>{props.title}</h1>
+          <h3>{props.title}</h3>
           <p>Status: {props.status}</p>
           <p>Rounds: {props.rounds}</p>
           {/* +1 for the creator */}

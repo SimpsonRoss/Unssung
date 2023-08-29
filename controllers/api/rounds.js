@@ -24,6 +24,7 @@ exports.createRound = async (req, res) => {
     const newRound = new Round({ 
       duration: game.roundDuration, 
       trackSubmissions: [],
+      players: game.players,
       songPickDeadline,
       songScoreDeadline
      });
@@ -59,8 +60,38 @@ exports.submitSong = async (req, res) => {
   try {
     const round = await Round.findById(id);
     round.trackSubmissions.push({ songId: songURL, player: userId });
-    await round.save();
     
+   // Check if all players have submitted their songs
+    if (round.trackSubmissions.length === round.players.length + 1) {
+      round.status = 'SongScore';
+    }
+    
+    
+    await round.save();
+
+    res.status(200).json(round);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+exports.submitScores = async (req, res) => {
+  const { id } = req.params; // Round ID
+  const { userId, multipliedScores } = req.body; // Scores is an array of { songId, score }
+  console.log('scores', multipliedScores);
+  console.log('userId', userId);
+
+  try {
+    const round = await Round.findById(id);
+
+    multipliedScores.forEach(({ songId, score }) => {
+      const submission = round.trackSubmissions.find(s => s.songId === songId);
+      if (submission) {
+        submission.scores.push(score);
+      }
+    });
+
+    await round.save();
     res.status(200).json(round);
   } catch (error) {
     res.status(400).json({ error });
