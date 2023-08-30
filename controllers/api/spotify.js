@@ -10,7 +10,8 @@ module.exports = {
   handleSpotifyRedirect,
   refreshAccessToken,
   getTopTracks,
-  createPlaylistAPI
+  createPlaylistAPI,
+  getCurrentUserProfile
 };
 
 function initiateSpotifyLogin(req, res) {
@@ -137,6 +138,42 @@ async function getTopTracks(req, res) {
     res.status(500).send('Internal Server Error');
   }
 }
+
+async function getCurrentUserProfile(req, res) {
+  const user = await User.findById(req.session.userId);
+  if (!user) {
+    return res.status(400).send('User not found.');
+  }
+
+  const token = user.spotifyAccessToken;
+
+  try {
+    const url = 'https://api.spotify.com/v1/me';
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.status !== 200) {
+      return res.status(response.status).send('Spotify API Error');
+    }
+
+    const data = await response.json();
+    const imageUrl = data.images[0]?.url || null;
+
+    await User.findByIdAndUpdate(req.session.userId, {
+      avatar: imageUrl
+    }, { new: true });
+
+    res.status(200).send(data);
+
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
 
 async function createPlaylistAPI(req, res) {
 

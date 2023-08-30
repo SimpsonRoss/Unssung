@@ -24,16 +24,43 @@ export default function ProfilePage({ user, setUser }) {
     
     fetchTopTracks();
   }, []);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const res = await fetch('http://localhost:5001/api/spotify/me', {
+          method: 'GET',
+          credentials: 'include'
+        });
+        if (res.status !== 200) throw new Error("Bad response from server");
+        const data = await res.json();
+        setUser({
+          ...user,
+          avatar: data.images[0]?.url || null
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    
+    fetchUserProfile();
+  }, []);
+
+  console.log('user avatar' + user.avatar)
+  
   
   return (
     <>
+      <img src={user.avatar} alt={`${user.name}'s Avatar`} />
       <h1>{user.name}'s Profile Page</h1>
       <p>Email: {user.email}</p>
 
-      <h2>Connect your Spotify</h2>
-      <button onClick={handleSpotifyAuth}>Connect</button>
+      { !user.spotifyAccessToken ? 
+      <><h2>Connect your Spotify</h2><button onClick={handleSpotifyAuth}>Connect</button> </> : 
+      <p>Spotify connected</p>
+      }
 
-      <h2>Your Top Tracks</h2>
+      <h2>Your Top Tracks on Spotify</h2>
       {topTracks ? (
         <ul>
           {topTracks.map((track, i) => (
