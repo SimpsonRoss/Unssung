@@ -47,7 +47,8 @@ export default function ProfilePage({ user, setUser }) {
   }, []);
 
   console.log('user avatar' + user.avatar)
-  
+  console.log('user' + user)
+  console.log('user.spotifyAccessToken' + user.spotifyAccessToken)
   
   return (
     <>

@@ -1,13 +1,15 @@
+// src/pages/GameDetailPage/GameDetailPage.jsx
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import RoundCard from "../../components/RoundCard/RoundCard";
 
-
 export default function GameDetailPage({ games, setGames }) {
   const { id } = useParams();
   const [game, setGame] = useState(null);
   const [rounds, setRounds] = useState([]);
+  const [lastRoundStatus, setLastRoundStatus] = useState(null);
 
   useEffect(() => {
     const fetchedGame = games.find(g => g._id === id);
@@ -17,6 +19,26 @@ export default function GameDetailPage({ games, setGames }) {
     }
   }, [games, id]);
 
+  useEffect(() => {
+    const fetchLastRoundStatus = async () => {
+      if (rounds.length > 0) {
+        const lastRoundId = rounds[rounds.length - 1];
+        console.log('lastRoundId' + lastRoundId)
+        try {
+          const res = await axios.get(`/api/rounds/${lastRoundId}`);
+          setLastRoundStatus(res.data.status);
+        } catch (error) {
+          console.error(`Error fetching last round's status: ${error}`);
+        }
+      }
+    };
+
+    fetchLastRoundStatus();
+  }, [rounds]);
+
+  const lastRoundFinished = !lastRoundStatus || lastRoundStatus === 'Finished';
+
+  console.log('lastRoundFinished' + lastRoundFinished)
   const updateGame = async (action, data) => {
     try {
       const updatedGame = await axios.put(`/api/games/${id}/update`, {action, data});
@@ -69,25 +91,26 @@ export default function GameDetailPage({ games, setGames }) {
       <p>Days per Round: {game.roundDuration}</p>
       <button onClick={() => updateRoundDuration(-1)} disabled={game.roundDuration <= 1}>- 1 Day</button>
     <button onClick={() => updateRoundDuration(1)}>+ 1 Day</button>
-      {game.players.length > 0 ?
+      {game.players.length > 1 ?
         <>
           <p>Number of Players: {game.players.length}</p>
           <p>Players: {game.players.map(player => player.name).join(game.players.length > 2 ? ', ' : ' & ')}</p>
         </>
         :
-        <p>Players: No players yet, invite some friends</p>
+        <p>Players: No players yet. Game's must have 3 players minimum. Share your code with friends.</p>
       }
       <p>Invite Code: {game.uniqueCode}</p>
       {game.status === 'New' && game.players.length > 1 && <button onClick={startGame}>Start Game</button>}
 
       {/* Logic for showing 'Start Round' button */}
       { game.status === 'InProgress' && 
-        // game.roundsArray.every(round => round.status === 'Finished') && 
+        lastRoundFinished && 
         game.roundsArray.length < game.roundCount && (
-      <button onClick={startRound}>
-        {`Start Round ${game.roundsArray.length + 1}`}
-      </button>
-    )}
+        <button onClick={startRound}>
+          {`Start Round ${game.roundsArray.length + 1}`}
+        </button>
+      )}
+
       <div className="Dash-Row">
         {game.roundsArray && game.roundsArray.length > 0 ?
           game.roundsArray.map((round, idx) => {

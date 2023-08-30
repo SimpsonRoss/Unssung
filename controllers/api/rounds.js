@@ -98,7 +98,7 @@ exports.submitScores = async (req, res) => {
     const numScoresForFirstSong = firstSong ? firstSong.scores.length : 0;
 
     // Check if all players have submitted their scores
-    if (numScoresForFirstSong === round.players.length) {
+    if (numScoresForFirstSong === round.players.length - 1) {
       round.status = 'RevealScore';
     }
 

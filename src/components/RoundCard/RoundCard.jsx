@@ -6,7 +6,7 @@ import './RoundCard.css';
 export default function RoundCard({ id, idx }) {
   const [round, setRound] = useState(null);
 
-  console.log('idx' + idx)
+  // console.log('idx' + idx)
   useEffect(() => {
     const fetchRound = async () => {
       try {
