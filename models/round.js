@@ -15,6 +15,8 @@ const roundSchema = new Schema({
     }],
     players: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
     status: { type: String, enum: roundStatus, default: 'SongPick' },
+    roundNumber: { type: Number },
+    gameTitle: { type: String },
     songPickDeadline: { type: Date, required: true },
     songScoreDeadline: { type: Date, required: true },
 }, { timestamps: true });

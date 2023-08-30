@@ -139,6 +139,9 @@ async function getTopTracks(req, res) {
 }
 
 async function createPlaylistAPI(req, res) {
+
+  const { tracksUri, roundNumber, gameTitle, songScoreDeadline } = req.body;
+
   console.log('Session data in createPlaylistAPI:', req.session);
 
   const user = await User.findById('64e8b0111ed7711eef7ec075'); //TEMP HARD CODED FOR EASE OF TESTING
@@ -148,7 +151,10 @@ async function createPlaylistAPI(req, res) {
   }
 
   let token = user.spotifyAccessToken;  // Get the current token from the user
-  const { tracksUri } = req.body;  // Get the tracks URI from the request body
+
+  const playlistName = `Round ${roundNumber} - ${gameTitle}`;
+  const playlistDescription = `Deadline to rate songs: ${new Date(songScoreDeadline).toLocaleString()}. Love from trkR8.`;
+
 
   async function attemptPlaylistCreation() {
     try {
@@ -157,8 +163,8 @@ async function createPlaylistAPI(req, res) {
       });
 
       const { data: playlist } = await axios.post(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
-        "name": "trkR8 ROUND Playlist",
-        "description": "Playlist that would hold round songs",
+        "name": playlistName,
+        "description": playlistDescription,
         "public": true
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -170,8 +176,8 @@ async function createPlaylistAPI(req, res) {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      res.status(200).json({ playlist });
-      
+      res.status(200).json({ playlistId: playlist.id });
+
     } catch (error) {
       // Check if token is expired (status code 401)
       if (error.response && error.response.status === 401) {

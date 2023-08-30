@@ -25,8 +25,10 @@ exports.createRound = async (req, res) => {
       duration: game.roundDuration, 
       trackSubmissions: [],
       players: game.players,
+      roundNumber: game.roundsArray.length + 1,
+      gameTitle: game.title,
       songPickDeadline,
-      songScoreDeadline
+      songScoreDeadline,
      });
     
     await newRound.save();
@@ -62,7 +64,7 @@ exports.submitSong = async (req, res) => {
     round.trackSubmissions.push({ songId: songURL, player: userId });
     
    // Check if all players have submitted their songs
-    if (round.trackSubmissions.length === round.players.length + 1) {
+    if (round.trackSubmissions.length === round.players.length) {
       round.status = 'SongScore';
     }
     

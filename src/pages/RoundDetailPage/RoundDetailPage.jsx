@@ -8,6 +8,9 @@ export default function RoundDetailPage({user}) {
   const { id } = useParams(); // id is the round id
   const [round, setRound] = useState(null);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
+  const [playlistId, setPlaylistId] = useState(null);
+  const [savedPlaylist, setSavedPlaylist] = useState(false);
+
 
   useEffect(() => {
     const fetchRound = async () => {
@@ -71,16 +74,23 @@ export default function RoundDetailPage({user}) {
       return `spotify:track:${trackId}`;
     });
     console.log(round);
-    // console.log(`tracksUrls: ${tracksUrls}`)
-    // console.log(`tracksUris: ${tracksUris}`)
+
+    const playlistInfo = {
+      tracksUri,
+      roundNumber: round.roundNumber,
+      gameTitle: round.gameTitle,
+      songScoreDeadline: round.songScoreDeadline
+    };
 
     // const tracksUri = [
     //   'spotify:track:3vRQw2YQTzhNGvul0Cb7my','spotify:track:4LySqCK5ki8uqgu5MFFfCZ','spotify:track:3XXemjIqQleJMVtae2Vsb6','spotify:track:4zZKZl3uUJRSs2d11hdbXB','spotify:track:2EG9MUgdONcBkJz89sm0ec','spotify:track:2Il469OIMB21ZQQfpHtgPr','spotify:track:7urRCjsGZ8XpVRLO5LANhN','spotify:track:57B0ON91WpCglYhvJQRc0r','spotify:track:30HFe6UMIF451p0abseDsT','spotify:track:5kQQ3eAIsg5DGbikSHQ8qG'
     // ];
     
     try {
-      const response = await axios.post('http://localhost:5001/api/spotify/create-playlist-api', { tracksUri }, { withCredentials: true });
+      const response = await axios.post('http://localhost:5001/api/spotify/create-playlist-api', playlistInfo, { withCredentials: true });
+      setPlaylistId(response.data.playlistId);
       console.log(`Created playlist`);
+      setSavedPlaylist(true);
     } catch (error) {
       console.error('Round Detail Page - Failed to create playlist:', error);
     }
@@ -93,7 +103,8 @@ export default function RoundDetailPage({user}) {
 
   return (
     <div>
-      <h1>Round Details</h1>
+      <h1>Round {round.roundNumber} Details</h1>
+      <p>Game: {round.gameTitle}</p>
       <p>Status: {round.status}</p>
       <p>Duration: {round.duration} days</p>
       <p>Start Date: {startDate.toLocaleString()}</p>
@@ -111,7 +122,7 @@ export default function RoundDetailPage({user}) {
         (round.status === 'SongScore') && <SongScoreForm trackSubmissions={round.trackSubmissions} userId={user._id} roundId={id}  />
       }
       {
-        (round.status !== 'SongPick') && <button onClick={savePlaylistToSpotify}>Save to Spotify</button>
+        (round.status !== 'SongPick') && (!savedPlaylist) && <button onClick={savePlaylistToSpotify}>Save to Spotify</button>
       }
 
       {
@@ -134,6 +145,16 @@ export default function RoundDetailPage({user}) {
           }
         </div>
       }
+      { (round.status !== 'SongPick') && (savedPlaylist) && <iframe
+        title="Spotify Embed: Recommendation Playlist "
+        src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
+        width="100%"
+        height="100%"
+        style={{ minHeight: '360px' }}
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      />}
     </div>
   );
 }

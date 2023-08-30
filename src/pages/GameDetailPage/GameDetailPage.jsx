@@ -30,9 +30,9 @@ export default function GameDetailPage({ games, setGames }) {
   if (!game) {
     return <div>Loading or Game not found...</div>;
   }
-  
   const startGame = () => {
     updateGame('start', {});
+    
   };
   
   const updateRoundCount = (changeBy) => {
@@ -48,7 +48,7 @@ export default function GameDetailPage({ games, setGames }) {
       const newRound = await axios.post('/api/rounds/create', {
         duration: game.roundDuration,
         gameId: game._id,
-        players: game.players
+        players: game.players,
       });
       // Temporarily calling this line below, just to clear the 'Start Round' button
       updateGame('start', {}); 
@@ -71,14 +71,14 @@ export default function GameDetailPage({ games, setGames }) {
     <button onClick={() => updateRoundDuration(1)}>+ 1 Day</button>
       {game.players.length > 0 ?
         <>
-          <p>Number of Players: {game.players.length + 1}</p>
+          <p>Number of Players: {game.players.length}</p>
           <p>Players: {game.players.map(player => player.name).join(game.players.length > 2 ? ', ' : ' & ')}</p>
         </>
         :
         <p>Players: No players yet, invite some friends</p>
       }
       <p>Invite Code: {game.uniqueCode}</p>
-      {game.status === 'New' && <button onClick={startGame}>Start Game</button>}
+      {game.status === 'New' && game.players.length > 1 && <button onClick={startGame}>Start Game</button>}
 
       {/* Logic for showing 'Start Round' button */}
       { game.status === 'InProgress' && 

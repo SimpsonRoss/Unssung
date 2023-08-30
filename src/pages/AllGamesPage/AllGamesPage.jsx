@@ -8,6 +8,8 @@ import JoinGameModal from '../../components/JoinGameModal/JoinGameModal';
 export default function AllGamesPage({ games, setGames }) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   const handleOpenCreateModal = () => setIsCreateModalOpen(true);
   const handleCloseCreateModal = () => setIsCreateModalOpen(false);
@@ -18,11 +20,15 @@ export default function AllGamesPage({ games, setGames }) {
   const handleJoinGame = async (uniqueCode) => {
     try {
       const response = await axios.put(`/api/games/join`, { uniqueCode });
-
-      // Update the local state with the joined game.
       const joinedGame = response.data;
       setGames([...games, joinedGame]);
+      setErrorMessage("");  // Clear any previous error messages
     } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessage(error.response.data.error);
+      } else {
+        setErrorMessage("An unknown error occurred.");
+      }
       console.error(`Failed to join the game: ${error}`);
     }
   };
@@ -34,6 +40,7 @@ export default function AllGamesPage({ games, setGames }) {
       <button onClick={handleOpenJoinModal}>Join Game</button>
       <CreateGameModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
       <JoinGameModal isOpen={isJoinModalOpen} onClose={handleCloseJoinModal} onJoinGame={handleJoinGame} />
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="Dash-Row">
         { games ?
           games.map((game, idx) => {

@@ -76,6 +76,11 @@ async function joinGame(req, res) {
     const game = await Game.findOne({ uniqueCode: uniqueCode });
     if (!game) return res.status(404).json({ error: 'Game not found' });
 
+    // Check if roundsArray is empty
+    if (game.roundsArray && game.roundsArray.length > 0) {
+      return res.status(400).json({ error: 'Game has already begun. Cannot join.' });
+    }
+
     const playerId = req.session.userId;
     console.log("joinGame - playerId = ", playerId);
     game.players.push(playerId);

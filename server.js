@@ -5,9 +5,9 @@ const logger = require('morgan');
 const cors = require('cors');
 const session = require('express-session');
 
-require('dotenv').config();
-// Connect to db after the dotenv above
+require('dotenv').config(); // Connect to db after the dotenv
 require('./config/database');
+require('./config/cronJobs'); // Importing the cron jobs
 
 const app = express();
 

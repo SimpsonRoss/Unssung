@@ -12,8 +12,7 @@ export default function GameCard(props) {
           <h3>{props.title}</h3>
           <p>Status: {props.status}</p>
           <p>Rounds: {props.rounds}</p>
-          {/* +1 for the creator */}
-          <p>Players: {props.players.length + 1}</p> 
+          <p>Players: {props.players.length}</p> 
         </div>
       </Link>
     </>
