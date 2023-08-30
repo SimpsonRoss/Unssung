@@ -10,7 +10,10 @@ export default function ProfilePage({ user, setUser }) {
   useEffect(() => {
     const fetchTopTracks = async () => {
       try {
-        const res = await fetch('http://localhost:5001/api/spotify/top-tracks');
+        const res = await fetch('http://localhost:5001/api/spotify/top-tracks', {
+          method: 'GET',
+          credentials: 'include'  // Important
+        });
         if (res.status !== 200) throw new Error("Bad response from server");
         const data = await res.json();
         setTopTracks(data.items);

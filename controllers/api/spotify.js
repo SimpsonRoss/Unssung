@@ -5,7 +5,6 @@ const fetch = require('node-fetch');
 const qs = require('qs');
 const User = require('../../models/user');
 
-
 module.exports = {
   initiateSpotifyLogin,
   handleSpotifyRedirect,
@@ -13,9 +12,6 @@ module.exports = {
   getTopTracks,
   createPlaylistAPI
 };
-
-// Hardcoded user ID for testing
-// const USER_ID = '64e8b0111ed7711eef7ec075';
 
 function initiateSpotifyLogin(req, res) {
   const scopes = 'user-read-private user-library-read playlist-read-private user-top-read playlist-modify-public playlist-modify-private streaming user-read-email';
@@ -80,19 +76,17 @@ async function handleSpotifyRedirect(req, res) {
 };
 
 
-async function refreshAccessToken(req, res) {
-  console.log('Refreshing Spotify access token. req.user:', req.user);
-  
-  if (!req.user || !req.user.spotifyRefreshToken) {
+async function refreshAccessToken(userId) {
+  const user = await User.findById(userId);
+  if (!user || !user.spotifyRefreshToken) {
     console.error("No refresh token found");
-    res.status(400).send('No refresh token found. Login required.');
-    return;
+    return { status: 400, message: 'No refresh token found. Login required.' };
   }
 
   try {
     const response = await axios.post('https://accounts.spotify.com/api/token', qs.stringify({
       grant_type: 'refresh_token',
-      refresh_token: req.user.spotifyRefreshToken,
+      refresh_token: user.spotifyRefreshToken,
       client_id: process.env.SPOTIFY_CLIENT_ID,
       client_secret: process.env.SPOTIFY_CLIENT_SECRET,
     }), {
@@ -102,30 +96,26 @@ async function refreshAccessToken(req, res) {
     });
 
     const { access_token } = response.data;
-
-    await User.findByIdAndUpdate(req.user.id, {
+    await User.findByIdAndUpdate(userId, {
       spotifyAccessToken: access_token,
     });
 
-    res.send({ 'access_token': access_token });
+    return { status: 200, access_token };
   } catch (err) {
     console.error(err);
-    res.status(400).send('Failed to refresh Spotify access token.');
+    return { status: 400, message: 'Failed to refresh Spotify access token.' };
   }
 }
 
-
 async function getTopTracks(req, res) {
-  // console.log('Getting top tracks. req.session.userId:', req.session.userId);
-  // TEMPORARILY - hardcoding user ID for testing
-  const user = await User.findById('64e8b0111ed7711eef7ec075');
+
+  console.log('Session data in getTopTracks:', req.session);
+  const user = await User.findById(req.session.userId);
   if (!user) {
     return res.status(400).send('User not found.');
   }
 
   const token = user.spotifyAccessToken;
-  // console.log('TOKEN:', token)
-  // console.log('USER:', user)
 
   try {
     const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5';
@@ -149,39 +139,55 @@ async function getTopTracks(req, res) {
 }
 
 async function createPlaylistAPI(req, res) {
-  const user = await User.findById('64e8b0111ed7711eef7ec075');
+  console.log('Session data in createPlaylistAPI:', req.session);
+
+  const user = await User.findById('64e8b0111ed7711eef7ec075'); //TEMP HARD CODED FOR EASE OF TESTING
+  // const user = await User.findById(req.session.userId);
   if (!user) {
     return res.status(400).send('User not found.');
   }
 
-  const token = user.spotifyAccessToken;
-  console.log('TOKEN from createPlaylistAPI:', token)
-  const { tracksUri } = req.body;
-  // console.log('tracksUri:', tracksUri)
-  try {
-    const { data: { id: user_id } } = await axios.get('https://api.spotify.com/v1/me', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    console.log('user_id:', user_id)
-    
-    const { data: playlist } = await axios.post(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
-      "name": "NEWWW PLAYLIST FROM APP",
-      "description": "HOLY SH*T THIS WORKED",
-      "public": true
-    }, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+  let token = user.spotifyAccessToken;  // Get the current token from the user
+  const { tracksUri } = req.body;  // Get the tracks URI from the request body
 
-    await axios.post(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
-      uris: tracksUri
-    }, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+  async function attemptPlaylistCreation() {
+    try {
+      const { data: { id: user_id } } = await axios.get('https://api.spotify.com/v1/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
 
-    res.status(200).json({ playlist });
-  } catch (error) {
-    console.error("Spotify API error:", error.response ? error.response.data : error);
-    res.status(500).send('Internal Server Error');
+      const { data: playlist } = await axios.post(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
+        "name": "trkR8 ROUND Playlist",
+        "description": "Playlist that would hold round songs",
+        "public": true
+      }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      await axios.post(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
+        uris: tracksUri
+      }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      res.status(200).json({ playlist });
+      
+    } catch (error) {
+      // Check if token is expired (status code 401)
+      if (error.response && error.response.status === 401) {
+        const refreshResult = await refreshAccessToken(user._id);
+        if (refreshResult.status !== 200) {
+          res.status(refreshResult.status).send(refreshResult.message);
+          return;
+        }
+        token = refreshResult.access_token;  // Update the token
+        return attemptPlaylistCreation();  // Retry the function
+      } else {
+        console.error("Spotify API error:", error.response ? error.response.data : error);
+        res.status(500).send('Internal Server Error');
+      }
     }
-}
+  }
 
+  await attemptPlaylistCreation();  // Initial attempt
+}

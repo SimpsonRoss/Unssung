@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt');
 const User = require('../../models/user');
 
 module.exports = {
-  create,
   login,
+  create,
   getUser,
 };
 
@@ -16,6 +16,7 @@ async function login(req, res) {
     // attempting to add user id to a session it can be called later
     req.session.userId = user._id;
     console.log('req.session.userId:', req.session.userId);
+    console.log(req.session)
     if (!user) throw new Error();
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) throw new Error();

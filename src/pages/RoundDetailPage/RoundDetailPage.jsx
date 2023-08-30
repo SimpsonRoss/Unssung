@@ -64,15 +64,23 @@ export default function RoundDetailPage({user}) {
 
   const savePlaylistToSpotify = async () => {
     // Dynamically collect the track URIs from the round's submissions
-    // const tracksUri = round.trackSubmissions.map(submission => submission.songId);
+    const tracksUrls = round.trackSubmissions.map(submission => submission.songId);
+    const tracksUri = tracksUrls.map(url => { 
+      const urlParts = url.split('/');
+      const trackId = urlParts[4].split('?')[0];
+      return `spotify:track:${trackId}`;
+    });
+    console.log(round);
+    // console.log(`tracksUrls: ${tracksUrls}`)
+    // console.log(`tracksUris: ${tracksUris}`)
 
-    const tracksUri = [
-      'spotify:track:3vRQw2YQTzhNGvul0Cb7my','spotify:track:4LySqCK5ki8uqgu5MFFfCZ','spotify:track:3XXemjIqQleJMVtae2Vsb6','spotify:track:4zZKZl3uUJRSs2d11hdbXB','spotify:track:2EG9MUgdONcBkJz89sm0ec','spotify:track:2Il469OIMB21ZQQfpHtgPr','spotify:track:7urRCjsGZ8XpVRLO5LANhN','spotify:track:57B0ON91WpCglYhvJQRc0r','spotify:track:30HFe6UMIF451p0abseDsT','spotify:track:5kQQ3eAIsg5DGbikSHQ8qG'
-    ];
+    // const tracksUri = [
+    //   'spotify:track:3vRQw2YQTzhNGvul0Cb7my','spotify:track:4LySqCK5ki8uqgu5MFFfCZ','spotify:track:3XXemjIqQleJMVtae2Vsb6','spotify:track:4zZKZl3uUJRSs2d11hdbXB','spotify:track:2EG9MUgdONcBkJz89sm0ec','spotify:track:2Il469OIMB21ZQQfpHtgPr','spotify:track:7urRCjsGZ8XpVRLO5LANhN','spotify:track:57B0ON91WpCglYhvJQRc0r','spotify:track:30HFe6UMIF451p0abseDsT','spotify:track:5kQQ3eAIsg5DGbikSHQ8qG'
+    // ];
     
     try {
-      const response = await axios.post('http://localhost:5001/api/spotify/create-playlist-api', { tracksUri });
-      console.log(`Created playlist ${response.data.name} with ID ${response.data.id}`);
+      const response = await axios.post('http://localhost:5001/api/spotify/create-playlist-api', { tracksUri }, { withCredentials: true });
+      console.log(`Created playlist`);
     } catch (error) {
       console.error('Round Detail Page - Failed to create playlist:', error);
     }
