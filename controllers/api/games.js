@@ -61,7 +61,9 @@ async function updateGame(req, res) {
       if (game.roundCount < 1) game.roundCount = 1;
     } else if (action === 'updateRoundDuration') {
       game.roundDuration += data.changeBy;
-      if (game.roundDuration < 1) game.roundDuration = 1;
+      if (game.roundDuration < 1) game.roundDuration = 1; 
+    } else if (action === 'finish') {
+      game.status = 'Finished';
     }
     await game.save();
     res.status(200).json(game);

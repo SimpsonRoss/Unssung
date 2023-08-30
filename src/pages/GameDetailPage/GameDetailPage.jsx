@@ -54,8 +54,29 @@ export default function GameDetailPage({ games, setGames }) {
   }
   const startGame = () => {
     updateGame('start', {});
-    
   };
+
+  const finishGame = async () => {
+    updateGame('finish', {});
+  };
+
+  // const calculatePlayerScores = () => {
+  //   const playerScores = {};
+
+  //   rounds.forEach((round) => {
+  //     round.trackSubmissions.forEach((submission) => {
+  //       const playerId = submission.player;
+  //       const score = submission.scores.reduce((acc, cur) => acc + cur, 0);
+  //       playerScores[playerId] = (playerScores[playerId] || 0) + score;
+  //     });
+  //   });
+
+  //   // Sort players by their scores
+  //   const sortedPlayers = Object.entries(playerScores).sort((a, b) => b[1] - a[1]);
+  //   return sortedPlayers;
+  // };
+
+  // const sortedPlayers = game && game.status === 'Finished' ? calculatePlayerScores() : [];
   
   const updateRoundCount = (changeBy) => {
     updateGame('updateRoundCount', { changeBy });
@@ -120,6 +141,26 @@ export default function GameDetailPage({ games, setGames }) {
           <p>No rounds to display just yet...</p>
         }
       </div>
+
+      {/* Logic for showing 'Finish Game' button */}
+      {game.status === 'InProgress' && 
+      lastRoundFinished && 
+      game.roundsArray.length === game.roundCount && (
+        <button onClick={finishGame}>Finish Game</button>
+      )}
+
+      {/* Show the sorted players */}
+      {/* {game.status === 'Finished' && (
+        <div>
+          <h2>Final Scores:</h2>
+          <ol>
+            {sortedPlayers.map(([playerId, score], index) => (
+              <li key={index}>{`${playerId}: ${score}`}</li>
+            ))}
+          </ol>
+        </div>
+      )} */}
+
     </div>
   );
 }
