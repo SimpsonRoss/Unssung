@@ -57,28 +57,61 @@ export default function App() {
         </div>
 
         <ul className="list-group list-group-flush">
-          <p>It's to kick ass and share music, and I'm all outa music!</p>
-          {/* <li ><Link to={"/dash"}>Dash</Link></li> */}
-          <li className='list-group-item-dark'><Link to={"/games"}>Games Dashboard</Link></li>
-          <li className='list-group-item-dark'><Link to={"/games"}>Create a New Game</Link></li>
-          <li className='list-group-item-dark'><Link to="" onClick={handleLogOut}>Log Out</Link></li>
+          <p>It's time to kick ass and share music, and I'm all outa music!</p>
+          <br/>
+          <li className='list-group-item-dark'><Link className="custom-hover" to={"/games"}> 
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+              <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+            </svg>
+            &nbsp;&nbsp;
+            Games Dashboard</Link></li>
+          <li className='list-group-item-dark'><Link className="custom-hover" to={"/account"}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+            </svg>
+          &nbsp;&nbsp;
+            Account Page</Link></li>
+          <li className='list-group-item-dark'><Link className="custom-hover" to="" onClick={handleLogOut}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+  <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+</svg>
+&nbsp;&nbsp;
+            Log Out</Link></li>
           <br/>
           <br/>
           <br/>
           
-          <a href="#" className="list-group-item-dark list-group-item-action border">
-            <div className="d-flex w-100 justify-content-between">
-              <h5 className="mb-1">Create New Game</h5>
-             </div>
-            <p className="mb-1">create a new game and get playing!</p>
-          </a>
+          <li className='list-group-item-dark border mx-2'>
+            <Link to="/create-game" className="custom-hover">
+              <div className="d-flex w-100 justify-content-between">
+                <h5 className="mb-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>  
+            &nbsp;&nbsp; 
+                  New Game</h5>
+              </div>
+              <p className="mb-1 ">Create a new game and get playing!</p>
+            </Link>
+          </li>
           <br/>
-          <a href="#" className="list-group-item-dark list-group-item-action border">
-            <div className="d-flex w-100 justify-content-between">
-              <h5 className="mb-1">Join a Game</h5>
-             </div>
-            <p className="mb-1">enter code to join a friends game!</p>
-          </a>
+          <li className='list-group-item-dark border mx-2'>
+            <Link to="/join-game" className="custom-hover">
+              <div className="d-flex w-100 justify-content-between">
+                <h5 className="mb-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>  
+            &nbsp;&nbsp; 
+                Join Game</h5>
+              </div>
+              <p className="mb-1">Enter code to join a friend's game!</p>
+            </Link>
+          </li>
         </ul>
       </nav> : null }
 
@@ -107,17 +140,33 @@ export default function App() {
     </div>
 
     { user ? 
-    <nav className="navbar fixed-bottom navbar-expand-lg bg-black">
+    <nav className="navbar fixed-bottom navbar-expand-lg bg-black pe-5">
       <div className="container-fluid">
 
           <button type="button" id="sidebarCollapse" className="btn btn-outline-light">
+            {/* TOGGLE */}
               <i className="fas fa-align-left"></i>
-              <span>Toggle</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+              </svg>
           </button>
-          {/* <div className="QuickNavCircle"><Link to={"/dash"}>Dash</Link></div> */}
-          <div className="QuickNavCircle"><Link to={"/games"}>All Games</Link></div>
-          <div className="QuickNavCircle"><Link to={"/games"}>New Game</Link></div>
-          <div className="QuickNavCircle"><Link to={"/account"}>Account</Link></div>
+          <div><Link to={"/games"}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" class="bi bi-house" viewBox="0 0 16 16">
+              <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+            </svg>
+            </Link></div>
+          <div><Link to={"/games"}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-plus-square" viewBox="0 0 16 16">
+              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>         
+          </Link></div>
+          <div><Link to={"/account"}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+            </svg>
+          </Link></div>
       </div>
     </nav> : null }
   </div>

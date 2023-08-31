@@ -27,9 +27,9 @@ align-items: stretch;
 }
 
 .sidebar-header {
-  color: white;
+  color: black;
   padding: 20px;
-  background: purple
+  background: whitesmoke
 }
 
 #sidebar ul li a {
@@ -68,7 +68,6 @@ ul ul a {
 }
 
 
-
 @media (max-width: 768px) {
   #sidebar {
       margin-left: -250px;
@@ -79,6 +78,7 @@ ul ul a {
 }
 
 #pageContent {
+  max-width: 100%;
   background-color: rgb(0, 0, 0);
   color: white;
   flex: 1;
@@ -92,3 +92,63 @@ ul ul a {
   flex: 1;
 }
 
+.custom-hover:hover {
+  color: black !important; 
+}
+
+
+.Card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40vmin;  
+  height: 40vmin;  
+  padding: 2vmin;
+  background-color: black;
+  border: solid 1px white;  
+  border-radius: 2vmin;
+  margin: 3vmin;
+  margin-bottom: 5vmin;
+  position: relative; 
+}
+
+.Card * {
+  margin: .2rem auto; 
+}
+
+.game-row {
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.equal-width-button {
+  width: calc(50% - 2vmin); 
+  margin-right: 2vmin;
+}
+
+.dashContainer {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.profilePhoto {
+  width: 25vmin;
+  height: auto;
+  border-radius: 50%;
+  border: solid 1vmin white;
+}
+
+hr {
+  height: 1.5vmin;
+  border: white solid 1px;
+  background-color: white;
+}
+
+.miniPhoto {
+  width: 15vmin;
+  height: auto;
+  border-radius: 50%;
+  border: solid 2px white;
+  margin: 1vmin;
+}

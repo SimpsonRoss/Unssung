@@ -20,7 +20,15 @@ export default function CreateGameModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className={modalClass} tabIndex="-1">
+    <div 
+      className={modalClass} 
+      tabIndex="-1" 
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
       <div className="modal-dialog">
         <div className="modal-content bg-dark text-white">
           <div className="modal-header text-center">

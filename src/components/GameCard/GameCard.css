@@ -1,14 +1,16 @@
-.GameCard {
+/* .GameCard {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 50%;
   height: 20%;
-  background-color: darkgray;
+  background-color: black;
+  border: solid 1px white;  
   border-radius: 2vmin;
   padding: 1vmin;
+  margin: 3vmin;
 }
 
 .GameCard * {
 margin: .5rem auto; 
-}
+} */

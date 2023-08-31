@@ -17,6 +17,9 @@ export default function AllGamesPage({ games, setGames }) {
   const handleOpenJoinModal = () => setIsJoinModalOpen(true);
   const handleCloseJoinModal = () => setIsJoinModalOpen(false);
 
+
+
+
   const handleJoinGame = async (uniqueCode) => {
     try {
       const response = await axios.put(`/api/games/join`, { uniqueCode });
@@ -33,26 +36,46 @@ export default function AllGamesPage({ games, setGames }) {
     }
   };
 
+  const currentGames = games?.filter(game => game.status === 'New' || game.status === 'InProgress') || [];
+  const finishedGames = games?.filter(game => game.status === 'Finished') || [];
+
   return (
-    <div className="Dash-Container">
-      <h1>Your games</h1>
-      <br />
-      <div className="Dash-Row">
-        { games ?
-          games.map((game, idx) => {
-          return <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />})
-          :
-          <p>You haven't created or joined any games yet</p>
-        }
+    <div className="container dashContainer">
+      {/* <h1>Your games</h1> */}
+      <h1 className='mt-3 mb-3'>Your games</h1>
+      <hr />
+   
+      {/* New and In Progress Games */}
+      <h2 className='mt-5'>Current Games</h2>
+      <div className="game-row d-flex flex-row flex-nowrap">
+        {currentGames.length > 0 ? currentGames.map((game, idx) => (
+          <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
+        )) : <p>No current games</p>}
       </div>
       <br />
-      <button className="btn btn-outline-light mt-2 mx-auto w-50" onClick={handleOpenCreateModal}>Create New Game</button> 
-      <button className="btn btn-outline-light mt-2 mx-auto w-50" onClick={handleOpenJoinModal}>Join Game</button>
+      {/* Finished Games */}
+      <h2>Past Games</h2>
+      <div className="game-row d-flex flex-row flex-nowrap">
+        {finishedGames.length > 0 ? finishedGames.map((game, idx) => (
+          <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
+        )) : <p>No finished games</p>}
+      </div>
+
+      <br />
+      
+      <div className="w-100">
+  <button className="btn btn-outline-light mt-2 equal-width-button" onClick={handleOpenCreateModal}>Create New Game</button>
+  <button className="btn btn-outline-light mt-2 equal-width-button" onClick={handleOpenJoinModal}>Join Game</button>
+</div>
+
       <CreateGameModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
       <JoinGameModal isOpen={isJoinModalOpen} onClose={handleCloseJoinModal} onJoinGame={handleJoinGame} />
         <br />
         <br />
       {errorMessage && <p className="error-message text-warning">{errorMessage}</p>}
+      <br />
+      <br />
+      <br />
     </div>
   );
 }

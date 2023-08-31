@@ -52,8 +52,11 @@ export default function ProfilePage({ user, setUser }) {
   
   return (
     <>
-      <img src={user.avatar} alt={`${user.name}'s Avatar`} />
-      <h1>{user.name}'s Profile Page</h1>
+      <br />
+      <img className="profilePhoto" src={user.avatar} alt={`${user.name}'s Avatar`} />
+      <br />
+      <br />
+      <h1>{user.name}</h1>
       <p>Email: {user.email}</p>
 
       { !user.spotifyAccessToken ? 

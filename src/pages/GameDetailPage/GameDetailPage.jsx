@@ -150,75 +150,123 @@ export default function GameDetailPage({ games, setGames }) {
       console.error(`Error starting new round: ${error}`);
     }
   };
+
+  const getNumberSuffix = (n) => {
+    const j = n % 10;
+    const k = n % 100;
+    if (j === 1 && k !== 11) {
+      return 'st';
+    }
+    if (j === 2 && k !== 12) {
+      return 'nd';
+    }
+    if (j === 3 && k !== 13) {
+      return 'rd';
+    }
+    return 'th';
+  };
   
 
   return (
     <div>
-      <h1>Title: {game.title}</h1>
-      <p>Status: {game.status}</p>
-      <p>Rounds: {game.roundCount}</p>
-      <button onClick={() => updateRoundCount(-1)} disabled={game.roundCount <= 1}>- 1 Round</button>
-      <button onClick={() => updateRoundCount(1)}>+ 1 Round</button>
-      <p>Days per Round: {game.roundDuration}</p>
-      <button onClick={() => updateRoundDuration(-1)} disabled={game.roundDuration <= 1}>- 1 Day</button>
-    <button onClick={() => updateRoundDuration(1)}>+ 1 Day</button>
+      <h1 className='mt-3 mb-3'>{game.title}</h1>
+      <hr />
+      <h4 className='mb-4'>Game is {(game.status === 'New') || (game.status === 'InProgress') ? <span className='text-success'>Live</span> : <span className='text-danger'>Over</span>}</h4>
+      <section className='mb-4'>
+      <h2 className='mb-1'>Rounds: {game.roundCount}</h2>
+        { (game.status !== 'Finished') ?
+        <>
+        <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundCount(-1)} disabled={game.roundCount <= 1}>- 1 Round</button>
+        <button className="btn btn-outline-light equal-width-button" onClick={() => updateRoundCount(1)}>+ 1 Round</button>
+        </>
+        : null 
+        }
+      </section>
+      <section className='mb-2'>
+      <h2 className='mb-1'>Days per Round: {game.roundDuration}</h2>
+        { (game.status !== 'Finished') ?
+        <>
+        <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundDuration(-1)} disabled={game.roundDuration <= 1}>- 1 Day</button>
+        <button className="btn btn-outline-light equal-width-button" onClick={() => updateRoundDuration(1)}>+ 1 Day</button>
+        </>
+        : null 
+        }
+      </section>
+      <br/>
+      
       {game.players.length > 1 ?
         <>
-          <p>Number of Players: {game.players.length}</p>
-          <p>Players: {game.players.map(player => player.name).join(game.players.length > 2 ? ', ' : ' & ')}</p>
+          {/* <h4 className='mb-3'>Number of Players: {game.players.length}</h4> */}
+          <h4 className='mb-2'>Players:</h4>
+          <h4 className='mb-4'><span className='text-success'>{game.players.map(player => player.name).join(game.players.length > 2 ? ', ' : ' & ')}</span></h4>
         </>
         :
-        <p>Players: No players yet. Game's must have 3 players minimum. Share your code with friends.</p>
+        <>
+          <h4 className='mb-2'>Players:</h4>
+          <p>Share your code with friends. Game's need at least 3 players.</p>
+        </>
       }
-      <p>Invite Code: {game.uniqueCode}</p>
-      {game.status === 'New' && game.players.length > 2 && <button onClick={startGame}>Start Game</button>}
-
+      { (game.status === 'New') ?
+      <>
+      <h4 className='mb-2'>Invite Code: </h4>
+      <h4 className='mb-4 text-success'>{game.uniqueCode}</h4>
+      {game.status === 'New' && game.players.length > 2 && <button className="btn btn-outline-light" onClick={startGame}>Start Game</button>}
+      </>
+      : null
+      }
       {/* Logic for showing 'Start Round' button */}
       { game.status === 'InProgress' && 
         lastRoundFinished && 
         game.roundsArray.length < game.roundCount && (
-        <button onClick={startRound}>
+        <button className="btn btn-outline-light" onClick={startRound}>
           {`Start Round ${game.roundsArray.length + 1}`}
         </button>
       )}
 
-      <div className="Dash-Row">
-        {game.roundsArray && game.roundsArray.length > 0 ?
-          game.roundsArray.map((round, idx) => {
-            return <RoundCard id={round} idx={idx+1} key={idx} />;
-          })
-          :
-          <p>No rounds to display just yet...</p>
-        }
-      </div>
+<div className="game-row d-flex flex-row flex-nowrap">
+            {game.roundsArray && game.roundsArray.length > 0 ?
+                game.roundsArray.map((round, idx) => {
+                    return <RoundCard id={round} idx={idx+1} key={idx} />;
+                })
+                :
+                null
+            }
+        </div>
 
       {/* Logic for showing 'Finish Game' button */}
       {game.status === 'InProgress' && 
       lastRoundFinished && 
       game.roundsArray.length === game.roundCount && (
-        <button onClick={finishGame}>Finish Game</button>
+        <button className="btn btn-outline-light" onClick={finishGame}>Finish Game</button>
       )}
 
       
-      {/* Show the sorted players */}
-      {game.status === 'Finished' && (
-        <div>
-          <h2>Final Scores:</h2>
-          <ol>
-            {sortedPlayers.map(([playerId, score], index) => (
-              <li key={index}>
-                <img 
+    {/* Show the sorted players */}
+    {game.status === 'Finished' && (
+      <div>
+        <h2 className='mt-3 mb-3'>Final Scores:</h2>
+        <ol className='list-group'>
+          {sortedPlayers.map(([playerId, score], index) => {
+            const place = index + 1;
+            const suffix = getNumberSuffix(place);
+            return (
+              <li className='list-group-item-dark mb-3' key={index}>
+                <img className='miniPhoto mb-2'
                   src={playerInfo[playerId]?.avatar || 'https://lh3.googleusercontent.com/a/AAcHTtdbTbALAxVdem0qmeAHIwErhMxZo1n4FTscpp9oWHQIPhsV=s288-c-no'} 
                   alt={`${playerInfo[playerId]?.name || playerId}'s avatar`} 
                   height="40px" 
                 />
-                {`: ${playerInfo[playerId]?.name || playerId}: ${score}`}
+                <h3>{place}{suffix} Place - <span>{playerInfo[playerId]?.name || playerId}</span></h3> {score} points
               </li>
-            ))}
-          </ol>
-        </div>
-      )}
-
+            );
+          })}
+        </ol>
+      </div>
+    )}
+      <br />
+      <br />
+      <br />
+    
     </div>
   );
 }
