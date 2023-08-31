@@ -1,7 +1,6 @@
 // src/components/SignUpForm/SignUpForm.jsx
 
 import { Component } from 'react';
-// Add this import
 import { signUp } from '../../utilities/users-service';
 
 export default class SignUpForm extends Component {
@@ -41,17 +40,32 @@ export default class SignUpForm extends Component {
     const disable = this.state.password !== this.state.confirm;
     return (
       <div>
-        <div className="form-container">
-          <form className="auth-form" autoComplete="off" onSubmit={this.handleSubmit}>
-            <input type="text" name="name" value={this.state.name} onChange={this.handleChange} placeholder='Username' required />
-            <input type="email" name="email" value={this.state.email} onChange={this.handleChange} placeholder='Email' required />
-            <input type="password" name="password" value={this.state.password} onChange={this.handleChange} placeholder='Password' required />
-            <input type="password" name="confirm" value={this.state.confirm} onChange={this.handleChange} placeholder='Confirm' required />
-            <button type="submit" disabled={disable}>SIGN UP</button>
+        <div>
+          <form className="darkCenter" autoComplete="off" onSubmit={this.handleSubmit}>
+            <div className="form-floating mb-3">
+              <input type="text" className="form-control" name="name" value={this.state.name} onChange={this.handleChange} placeholder='John' required />
+              <label>Name</label>
+            </div>
+
+            <div className="form-floating mb-3">
+              <input type="email" className="form-control" name="email" value={this.state.email} onChange={this.handleChange} placeholder='user@example.com' required />
+              <label>Email</label>
+            </div>
+            
+            <div className="form-floating mb-3">
+              <input type="password" className="form-control" name="password" value={this.state.password} onChange={this.handleChange} placeholder='' required />
+              <label>Password</label>
+            </div>
+
+            <div className="form-floating mb-3">
+              <input type="password" className="form-control" name="confirm" value={this.state.confirm} onChange={this.handleChange} placeholder='' required />
+              <label>Confirm Password</label>
+            </div>
+            
+            <button className="btn btn-outline-light" type="submit" disabled={disable}>SIGN UP</button>
           </form>
         </div>
         {this.state.error ? <p className="error-message">&nbsp;{this.state.error}</p> : null}
-        {/* <p className="error-message">&nbsp;{this.state.error}</p> */}
       </div>
     );
   }

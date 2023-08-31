@@ -31,11 +31,21 @@ export default function LoginForm({ setUser }) {
 
   return (
     <div>
-      <div className="form-container">
-        <form className="auth-form" autoComplete="off" onSubmit={handleSubmit}>
-          <input type="text" name="email" value={credentials.email} onChange={handleChange} placeholder='Email'required />
-          <input type="password" name="password" value={credentials.password} onChange={handleChange} placeholder='Password' required />
-          <button type="submit">LOG IN</button>
+      <div>
+        <form className="darkCenter" autoComplete="off" onSubmit={handleSubmit}>
+
+          <div className="form-floating mb-3">
+            <input type="text" className="form-control" name="email" value={credentials.email} onChange={handleChange} placeholder='user@example.com' required/>
+            <label>Email</label>
+          </div>
+
+          <div className="form-floating mb-3">
+            <input type="password" className="form-control" name="password" value={credentials.password} onChange={handleChange} placeholder='Password' required />
+            <label>Password</label>
+          </div>
+
+          <button className="btn btn-outline-light" type="submit">LOG IN</button>
+
         </form>
       </div>
       {error ? <p className="error-message">&nbsp;{error}</p> : null}

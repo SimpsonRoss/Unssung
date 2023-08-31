@@ -80,8 +80,8 @@ exports.submitSong = async (req, res) => {
 exports.submitScores = async (req, res) => {
   const { id } = req.params; // Round ID
   const { userId, multipliedScores } = req.body; // Scores is an array of { songId, score }
-  // console.log('scores', multipliedScores);
-  // console.log('userId', userId);
+  console.log('scores', multipliedScores);
+  console.log('userId', userId);
 
   try {
     const round = await Round.findById(id);

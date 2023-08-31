@@ -8,9 +8,10 @@ export default function NavBar() {
   
   return (
     <nav className="QuickNavBox">
-        <div className="QuickNavCircle"><Link to={"/dash"}>Dash</Link></div>
+        {/* <div className="QuickNavCircle"><Link to={"/dash"}>Dash</Link></div>
         <div className="QuickNavCircle"><Link to={"/games"}>All Games</Link></div>
-        <div className="QuickNavCircle"><Link to={"/account"}>Account</Link></div>
+        <div className="QuickNavCircle"><Link to={"/account"}>Account</Link></div> */}
+
     </nav>
   );
 }

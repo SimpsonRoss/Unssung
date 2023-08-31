@@ -1,4 +1,36 @@
-.MainApp {
+main {
+  background-color: black;
+  color: white;
+}
+
+.light {
+  color: white;
+}
+
+
+.darkCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: black;
+  text-align: center;
+}
+
+.dark {
+  background-color: black;
+}
+
+.authMargin {
+  margin: 10% 10%;
+}
+
+a {
+  text-decoration: none!important;
+  color: white!important;
+}
+
+
+/* .MainApp {
   height: 100%;
   display: grid;
   grid-template-columns: 2fr 6fr;
@@ -40,12 +72,12 @@
   gap: 1vmin;
   overflow-x: auto;
   white-space: nowrap;
-  max-width: 100%;  /* Ensures this element doesn't grow beyond its container */
+  max-width: 100%;  
 }
 
 .Dash-Row > * {
-  flex-shrink: 0;  /* Prevents items from shrinking */
+  flex-shrink: 0;  
 }
 .Footer {
   color: white;
-}
+} */

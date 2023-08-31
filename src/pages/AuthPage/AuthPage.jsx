@@ -7,16 +7,22 @@ import './AuthPage.css';
 export default function AuthPage({ setUser }) {
   const [showSignUp, setShowSignUp] = useState(false);
   return (
-    <main className="MainAuth">
-      <h1>AuthPage</h1>
+    <section className='darkCenter authMargin'>
+      <h1 className='light'>TRKR8</h1>
+      <h3 className='light'>The worlds most popular music game.</h3>
+      <br />
+      <p className='light'>please sign in or sign up to begin playing.</p>
+      <br />
       { showSignUp ?
           <SignUpForm setUser={setUser} />
           :
           <LoginForm setUser={setUser} />
       }
-     <p>or</p>
-      <button onClick={() => setShowSignUp(!showSignUp)}>{showSignUp ? 'Log In' : 'Sign Up'}</button>
+      <br />
+      
+     <p className='light'>or </p>
+      <button className="btn btn-outline-light" type="button" onClick={() => setShowSignUp(!showSignUp)}>{showSignUp ? 'LOG IN' : 'SIGN UP'}</button>
 
-    </main>
+    </section>
   );
 }
