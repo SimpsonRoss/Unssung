@@ -53,14 +53,14 @@ export default function App() {
       <nav id="sidebar">
         <div className="sidebar-header">
           {/* <h3>Hi { user.name }!</h3> */}
-          <h3>Hi there!</h3>
+          <h3>Hola Pepsi cola!</h3>
         </div>
 
         <ul className="list-group list-group-flush">
-          <p>Welcome to TRKR8!</p>
+          <p>It's to kick ass and share music, and I'm all outa music!</p>
           {/* <li ><Link to={"/dash"}>Dash</Link></li> */}
-          <li className='list-group-item-dark'><Link to={"/games"}>All Games</Link></li>
-          <li className='list-group-item-dark'><Link to={"/games"}>New Game</Link></li>
+          <li className='list-group-item-dark'><Link to={"/games"}>Games Dashboard</Link></li>
+          <li className='list-group-item-dark'><Link to={"/games"}>Create a New Game</Link></li>
           <li className='list-group-item-dark'><Link to="" onClick={handleLogOut}>Log Out</Link></li>
           <br/>
           <br/>

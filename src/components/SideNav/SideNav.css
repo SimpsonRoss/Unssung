@@ -83,6 +83,7 @@ ul ul a {
   color: white;
   flex: 1;
   text-align: center;
+  padding: 1vmin;
 }
 
 #testRow {

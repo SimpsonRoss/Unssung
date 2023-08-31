@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { createGame } from '../../utilities/games-api';
-
 
 export default function CreateGameModal({ isOpen, onClose }) {
   const [title, setTitle] = useState("");
   const [roundCount, setRoundCount] = useState(0);
   const [roundDuration, setRoundDuration] = useState(0);
+
+  const modalClass = isOpen ? 'modal fade show d-block' : 'modal fade';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,16 +20,37 @@ export default function CreateGameModal({ isOpen, onClose }) {
   };
 
   return (
-    <div style={{ display: isOpen ? 'block' : 'none' }}>
-      <div>
-        <button onClick={onClose}>Close</button>
-        <h2>Create New Game</h2>
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Game Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-          <input type="number" placeholder="Round Count" value={roundCount} onChange={(e) => setRoundCount(e.target.value)} />
-          <input type="number" placeholder="Days Per Round" value={roundDuration} onChange={(e) => setRoundDuration(e.target.value)} />
-          <button type="submit">Create</button>
-        </form>
+    <div className={modalClass} tabIndex="-1">
+      <div className="modal-dialog">
+        <div className="modal-content bg-dark text-white">
+          <div className="modal-header text-center">
+            <h5 className="modal-title modal-title position-absolute start-50 translate-middle-x">Create a New Game</h5>
+            <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
+          </div>
+          <div className="modal-body">
+            <form onSubmit={handleSubmit}>
+              <p>Game Title</p>
+              <div className="form-floating mb-3">
+                <input type="text" className="form-control" name="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='My new game'/>
+                <label>Title</label>
+              </div>
+              <p>Number of Rounds</p>
+              <div className="form-floating mb-3">
+                <input type="number" className="form-control" name="numRounds" placeholder="Enter number of rounds" value={roundCount} onChange={(e) => setRoundCount(e.target.value)} />
+                <label>Rounds</label>
+              </div>
+              <p>Days Per Round</p>
+              <div className="form-floating mb-3">
+                <input type="number" className="form-control" name="daysPerRound" placeholder="Enter days per round" value={roundDuration} onChange={(e) => setRoundDuration(e.target.value)} />
+                <label>Days</label>
+              </div>
+              <p>pssst... the average is 5 rounds, at 7 days per round. Plus you can adjust these later.</p>
+            </form>
+          </div>
+          <div className="modal-footer">
+            <button type="submit" className="btn btn-outline-light mx-auto" onClick={handleSubmit}>Create Game</button>
+          </div>
+        </div>
       </div>
     </div>
   );

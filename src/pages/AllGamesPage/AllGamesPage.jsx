@@ -35,12 +35,8 @@ export default function AllGamesPage({ games, setGames }) {
 
   return (
     <div className="Dash-Container">
-      <h1>AllGamesPage</h1>
-      <button onClick={handleOpenCreateModal}>Create New Game</button>
-      <button onClick={handleOpenJoinModal}>Join Game</button>
-      <CreateGameModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
-      <JoinGameModal isOpen={isJoinModalOpen} onClose={handleCloseJoinModal} onJoinGame={handleJoinGame} />
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <h1>Your games</h1>
+      <br />
       <div className="Dash-Row">
         { games ?
           games.map((game, idx) => {
@@ -49,6 +45,14 @@ export default function AllGamesPage({ games, setGames }) {
           <p>You haven't created or joined any games yet</p>
         }
       </div>
+      <br />
+      <button className="btn btn-outline-light mt-2 mx-auto w-50" onClick={handleOpenCreateModal}>Create New Game</button> 
+      <button className="btn btn-outline-light mt-2 mx-auto w-50" onClick={handleOpenJoinModal}>Join Game</button>
+      <CreateGameModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
+      <JoinGameModal isOpen={isJoinModalOpen} onClose={handleCloseJoinModal} onJoinGame={handleJoinGame} />
+        <br />
+        <br />
+      {errorMessage && <p className="error-message text-warning">{errorMessage}</p>}
     </div>
   );
 }
