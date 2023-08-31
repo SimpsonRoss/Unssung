@@ -1,5 +1,4 @@
 // src/pages/GameDetailPage/GameDetailPage.jsx
-
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -10,20 +9,68 @@ export default function GameDetailPage({ games, setGames }) {
   const [game, setGame] = useState(null);
   const [rounds, setRounds] = useState([]);
   const [lastRoundStatus, setLastRoundStatus] = useState(null);
+  const [playerNames, setPlayerNames] = useState({});
+
+  console.log('game:', game);
+
+
+  useEffect(() => {
+    const fetchPlayerNames = async () => {
+      const names = {};
+      for (const player of game.players) {
+        const playerId = player._id;        
+        try {
+          const res = await axios.get(`/api/users/${playerId}`);
+          console.log(`Fetched data for ${playerId}:`, res.data);  // Debug line
+          if (res.data && res.data.name) {
+            names[playerId] = res.data.name;
+          }
+        } catch (error) {
+          console.error(`Error fetching name for player ${playerId}: ${error}`);
+        }
+      }
+      console.log("Setting player names:", names);  // Debug line
+      setPlayerNames(names);
+    };
+    
+    if (game && game.players) {
+      fetchPlayerNames();
+    }
+  }, [game]);
+  
+  
 
   useEffect(() => {
     const fetchedGame = games.find(g => g._id === id);
     setGame(fetchedGame);
-    if (fetchedGame && fetchedGame.roundsArray) {
-      setRounds(fetchedGame.roundsArray);
-    }
   }, [games, id]);
 
   useEffect(() => {
+    const fetchAllRounds = async () => {
+      try {
+        const fetchedRounds = await Promise.all(
+          game.roundsArray.map(async roundId => {
+            const res = await axios.get(`/api/rounds/${roundId}`);
+            return res.data;
+          })
+        );
+        setRounds(fetchedRounds);
+      } catch (error) {
+        console.error(`Error fetching rounds: ${error}`);
+      }
+    };
+
+    if (game && game.roundsArray.length > 0) {
+      fetchAllRounds();
+    }
+  }, [game]);
+
+  // console.log('rounds' + JSON.stringify(rounds))
+  useEffect(() => {
     const fetchLastRoundStatus = async () => {
       if (rounds.length > 0) {
-        const lastRoundId = rounds[rounds.length - 1];
-        console.log('lastRoundId' + lastRoundId)
+        const lastRoundId = rounds[rounds.length - 1]._id;
+        // console.log('lastRoundId' + lastRoundId)
         try {
           const res = await axios.get(`/api/rounds/${lastRoundId}`);
           setLastRoundStatus(res.data.status);
@@ -32,13 +79,12 @@ export default function GameDetailPage({ games, setGames }) {
         }
       }
     };
-
     fetchLastRoundStatus();
   }, [rounds]);
 
   const lastRoundFinished = !lastRoundStatus || lastRoundStatus === 'Finished';
 
-  console.log('lastRoundFinished' + lastRoundFinished)
+  // console.log('lastRoundFinished' + lastRoundFinished)
   const updateGame = async (action, data) => {
     try {
       const updatedGame = await axios.put(`/api/games/${id}/update`, {action, data});
@@ -60,24 +106,27 @@ export default function GameDetailPage({ games, setGames }) {
     updateGame('finish', {});
   };
 
-  // const calculatePlayerScores = () => {
-  //   const playerScores = {};
+  const calculatePlayerScores = () => {
+    const playerScores = {};
+    rounds.forEach((round) => {
+      // console.log('round.trackSubmissions', round.trackSubmissions);
+      round.trackSubmissions.forEach((submission) => {
+        // console.log('submission.scores', submission.scores);
+        const playerId = submission.player;
+        const score = submission.scores.reduce((acc, cur) => acc + cur, 0);
+        playerScores[playerId] = (playerScores[playerId] || 0) + score;
+      });
+    });
+    // console.log('playerScores' + JSON.stringify(playerScores))
 
-  //   rounds.forEach((round) => {
-  //     round.trackSubmissions.forEach((submission) => {
-  //       const playerId = submission.player;
-  //       const score = submission.scores.reduce((acc, cur) => acc + cur, 0);
-  //       playerScores[playerId] = (playerScores[playerId] || 0) + score;
-  //     });
-  //   });
 
-  //   // Sort players by their scores
-  //   const sortedPlayers = Object.entries(playerScores).sort((a, b) => b[1] - a[1]);
-  //   return sortedPlayers;
-  // };
+    const sortedPlayers = Object.entries(playerScores).sort((a, b) => b[1] - a[1]);
+    // console.log('sortedPlayers' + JSON.stringify(sortedPlayers))
+    return sortedPlayers;
+  };
 
-  // const sortedPlayers = game && game.status === 'Finished' ? calculatePlayerScores() : [];
-  
+  const sortedPlayers = game && game.status === 'Finished' ? calculatePlayerScores() : [];
+
   const updateRoundCount = (changeBy) => {
     updateGame('updateRoundCount', { changeBy });
   };
@@ -149,17 +198,18 @@ export default function GameDetailPage({ games, setGames }) {
         <button onClick={finishGame}>Finish Game</button>
       )}
 
+      
       {/* Show the sorted players */}
-      {/* {game.status === 'Finished' && (
+      {game.status === 'Finished' && (
         <div>
           <h2>Final Scores:</h2>
           <ol>
             {sortedPlayers.map(([playerId, score], index) => (
-              <li key={index}>{`${playerId}: ${score}`}</li>
+              <li key={index}>{`${playerNames[playerId] || playerId}: ${score}`}</li>
             ))}
           </ol>
         </div>
-      )} */}
+      )}
 
     </div>
   );

@@ -10,7 +10,7 @@ router.post('/', usersCtrl.create);
 // POST /api/users/login
 router.post('/login', usersCtrl.login);
 
-router.get('/:id', ensureLoggedIn, usersCtrl.getUser);
+router.get('/:id', usersCtrl.getUser);
 
 
 module.exports = router;

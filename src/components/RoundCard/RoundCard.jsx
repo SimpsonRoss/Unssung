@@ -10,9 +10,9 @@ export default function RoundCard({ id, idx }) {
   useEffect(() => {
     const fetchRound = async () => {
       try {
-        console.log('fetching round' + id);
+        // console.log('fetching round' + id);
         const res = await axios.get(`/api/rounds/${id}`);
-        console.log(res.data);  
+        // console.log(res.data);  
         setRound(res.data);
       
       } catch (error) {

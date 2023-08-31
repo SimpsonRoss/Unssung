@@ -45,7 +45,7 @@ export default function SongScoreForm({ trackSubmissions, userId, roundId }) {
       const knownFactor = knows[songId] === 'Known' ? 0.5 : 1;
       return { songId, score: rank * knownFactor };
     });
-    console.log('multipliedScores: ', multipliedScores);
+    // console.log('multipliedScores: ', multipliedScores);
 
 
     try {

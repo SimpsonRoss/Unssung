@@ -110,7 +110,7 @@ async function refreshAccessToken(userId) {
 
 async function getTopTracks(req, res) {
 
-  console.log('Session data in getTopTracks:', req.session);
+  // console.log('Session data in getTopTracks:', req.session);
   const user = await User.findById(req.session.userId);
   if (!user) {
     return res.status(400).send('User not found.');
@@ -179,7 +179,7 @@ async function createPlaylistAPI(req, res) {
 
   const { tracksUri, roundNumber, gameTitle, songScoreDeadline } = req.body;
 
-  console.log('Session data in createPlaylistAPI:', req.session);
+  // console.log('Session data in createPlaylistAPI:', req.session);
 
   const user = await User.findById('64e8b0111ed7711eef7ec075'); //TEMP HARD CODED FOR EASE OF TESTING
   // const user = await User.findById(req.session.userId);
