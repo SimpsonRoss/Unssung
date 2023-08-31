@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function SongScoreForm({ trackSubmissions, userId, roundId }) {
+export default function SongScoreForm({ trackSubmissions, userId, roundId, onSuccess }) {
   const [knows, setKnows] = useState({});
   const [ranks, setRanks] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
@@ -47,10 +47,12 @@ export default function SongScoreForm({ trackSubmissions, userId, roundId }) {
     });
     // console.log('multipliedScores: ', multipliedScores);
 
-
     try {
       await axios.post(`/api/rounds/${roundId}/submitScores`, { userId, multipliedScores });
       console.log('scores submitted');
+      if (typeof onSuccess === 'function') {
+        onSuccess(); // Notify parent component that the scores were submitted
+      }
     } catch (error) {
       console.error(`Error submitting scores: ${error}`);
     }

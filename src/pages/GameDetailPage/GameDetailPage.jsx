@@ -171,7 +171,7 @@ export default function GameDetailPage({ games, setGames }) {
         <p>Players: No players yet. Game's must have 3 players minimum. Share your code with friends.</p>
       }
       <p>Invite Code: {game.uniqueCode}</p>
-      {game.status === 'New' && game.players.length > 1 && <button onClick={startGame}>Start Game</button>}
+      {game.status === 'New' && game.players.length > 2 && <button onClick={startGame}>Start Game</button>}
 
       {/* Logic for showing 'Start Round' button */}
       { game.status === 'InProgress' && 

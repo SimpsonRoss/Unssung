@@ -108,70 +108,83 @@ async function refreshAccessToken(userId) {
   }
 }
 
+
 async function getTopTracks(req, res) {
+  let user = await User.findById(req.session.userId);
+  let token = user.spotifyAccessToken;
 
-  // console.log('Session data in getTopTracks:', req.session);
-  const user = await User.findById(req.session.userId);
-  if (!user) {
-    return res.status(400).send('User not found.');
-  }
+  async function attemptTopTracksFetch() {
+    try {
+      const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5';
+      const response = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
 
-  const token = user.spotifyAccessToken;
-
-  try {
-    const url = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5';
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+      if (response.status !== 200) {
+        throw new Error('Spotify API Error');
       }
-    });
-    
-    if (response.status !== 200) {
-      return res.status(response.status).send('Spotify API Error');
-    }
 
-    const data = await response.json();
-    res.status(200).send(data);
-    
-  } catch (error) {
-    console.error("Error fetching top tracks:", error);
-    res.status(500).send('Internal Server Error');
+      const data = await response.json();
+      res.status(200).send(data);
+
+    } catch (error) {
+      if (error.message === 'Spotify API Error') {
+        const refreshResult = await refreshAccessToken(user._id);
+        if (refreshResult.status === 200) {
+          token = refreshResult.access_token;
+          return attemptTopTracksFetch();
+        } else {
+          res.status(refreshResult.status).send(refreshResult.message);
+        }
+      } else {
+        console.error("Error fetching top tracks:", error);
+        res.status(500).send('Internal Server Error');
+      }
+    }
   }
+  
+  await attemptTopTracksFetch();  // Initial attempt
 }
 
+
 async function getCurrentUserProfile(req, res) {
-  const user = await User.findById(req.session.userId);
-  if (!user) {
-    return res.status(400).send('User not found.');
-  }
+  let user = await User.findById(req.session.userId);
+  let token = user.spotifyAccessToken;
 
-  const token = user.spotifyAccessToken;
+  async function attemptUserProfileFetch() {
+    try {
+      const url = 'https://api.spotify.com/v1/me';
+      const response = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
 
-  try {
-    const url = 'https://api.spotify.com/v1/me';
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+      if (response.status !== 200) {
+        throw new Error('Spotify API Error');
       }
-    });
 
-    if (response.status !== 200) {
-      return res.status(response.status).send('Spotify API Error');
+      const data = await response.json();
+      const imageUrl = data.images[0]?.url || null;
+
+      await User.findByIdAndUpdate(req.session.userId, { avatar: imageUrl }, { new: true });
+      res.status(200).send(data);
+
+    } catch (error) {
+      if (error.message === 'Spotify API Error') {
+        const refreshResult = await refreshAccessToken(user._id);
+        if (refreshResult.status === 200) {
+          token = refreshResult.access_token;
+          return attemptUserProfileFetch();
+        } else {
+          res.status(refreshResult.status).send(refreshResult.message);
+        }
+      } else {
+        console.error("Error fetching user profile:", error);
+        res.status(500).send('Internal Server Error');
+      }
     }
-
-    const data = await response.json();
-    const imageUrl = data.images[0]?.url || null;
-
-    await User.findByIdAndUpdate(req.session.userId, {
-      avatar: imageUrl
-    }, { new: true });
-
-    res.status(200).send(data);
-
-  } catch (error) {
-    console.error("Error fetching user profile:", error);
-    res.status(500).send('Internal Server Error');
   }
+
+  await attemptUserProfileFetch();  // Initial attempt
 }
 
 
@@ -181,8 +194,8 @@ async function createPlaylistAPI(req, res) {
 
   // console.log('Session data in createPlaylistAPI:', req.session);
 
-  const user = await User.findById('64e8b0111ed7711eef7ec075'); //TEMP HARD CODED FOR EASE OF TESTING
-  // const user = await User.findById(req.session.userId);
+  // const user = await User.findById('64e8b0111ed7711eef7ec075'); //TEMP HARD CODED FOR EASE OF TESTING
+  const user = await User.findById(req.session.userId);
   if (!user) {
     return res.status(400).send('User not found.');
   }

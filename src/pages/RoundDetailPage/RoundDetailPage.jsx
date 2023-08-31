@@ -10,6 +10,7 @@ export default function RoundDetailPage({user}) {
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [playlistId, setPlaylistId] = useState(null);
   const [savedPlaylist, setSavedPlaylist] = useState(false);
+  const [scoreSubmitted, setScoreSubmitted] = useState(false);
 
 
   useEffect(() => {
@@ -27,6 +28,10 @@ export default function RoundDetailPage({user}) {
 
   const handleSuccessfulSubmit = () => {
     setSubmissionSuccess(true);
+  };
+
+  const handleScoreSubmitSuccess = () => {
+    setScoreSubmitted(true); 
   };
 
   if (!round) {
@@ -52,19 +57,6 @@ export default function RoundDetailPage({user}) {
     }
   };
 
-  // const savePlaylistToSpotify = async () => {
-  //   // TEMPORARILY - adding hardcoded tracks for now
-  //   const tracksUri = [
-  //     'spotify:track:3vRQw2YQTzhNGvul0Cb7my','spotify:track:4LySqCK5ki8uqgu5MFFfCZ','spotify:track:3XXemjIqQleJMVtae2Vsb6','spotify:track:4zZKZl3uUJRSs2d11hdbXB','spotify:track:2EG9MUgdONcBkJz89sm0ec','spotify:track:2Il469OIMB21ZQQfpHtgPr','spotify:track:7urRCjsGZ8XpVRLO5LANhN','spotify:track:57B0ON91WpCglYhvJQRc0r','spotify:track:30HFe6UMIF451p0abseDsT','spotify:track:5kQQ3eAIsg5DGbikSHQ8qG'
-  //   ];
-  //   try {
-  //     const response = await axios.post('/api/spotify/create-playlist', { tracksUri });
-  //     console.log(`Created playlist ${response.data.name} with ID ${response.data.id}`);
-  //   } catch (error) {
-  //     console.error('Failed to create playlist:', error);
-  //   }
-  // };
-
   const savePlaylistToSpotify = async () => {
     // Dynamically collect the track URIs from the round's submissions
     const tracksUrls = round.trackSubmissions.map(submission => submission.songId);
@@ -81,10 +73,6 @@ export default function RoundDetailPage({user}) {
       gameTitle: round.gameTitle,
       songScoreDeadline: round.songScoreDeadline
     };
-
-    // const tracksUri = [
-    //   'spotify:track:3vRQw2YQTzhNGvul0Cb7my','spotify:track:4LySqCK5ki8uqgu5MFFfCZ','spotify:track:3XXemjIqQleJMVtae2Vsb6','spotify:track:4zZKZl3uUJRSs2d11hdbXB','spotify:track:2EG9MUgdONcBkJz89sm0ec','spotify:track:2Il469OIMB21ZQQfpHtgPr','spotify:track:7urRCjsGZ8XpVRLO5LANhN','spotify:track:57B0ON91WpCglYhvJQRc0r','spotify:track:30HFe6UMIF451p0abseDsT','spotify:track:5kQQ3eAIsg5DGbikSHQ8qG'
-    // ];
     
     try {
       const response = await axios.post('http://localhost:5001/api/spotify/create-playlist-api', playlistInfo, { withCredentials: true });
@@ -119,7 +107,16 @@ export default function RoundDetailPage({user}) {
         userHasSubmitted && <p>Your Song Submission: <a href={userSubmission.songId} target="_blank" rel="noopener noreferrer">{userSubmission.songId}</a></p>
       }
       {
-        (round.status === 'SongScore') && <SongScoreForm trackSubmissions={round.trackSubmissions} userId={user._id} roundId={id}  />
+        (round.status === 'SongScore') ?
+        !scoreSubmitted ? // <-- Check if scores have been submitted
+          <SongScoreForm 
+            trackSubmissions={round.trackSubmissions} 
+            userId={user._id} 
+            roundId={id} 
+            onSuccess={handleScoreSubmitSuccess} // <-- Call this function when scores are submitted
+          />
+          : <p>Scores Submitted!</p> // <-- Display this message if scores have been submitted
+        : null
       }
       {
         (round.status !== 'SongPick') && (!savedPlaylist) && <button onClick={savePlaylistToSpotify}>Save to Spotify</button>
