@@ -9,28 +9,29 @@ export default function GameDetailPage({ games, setGames }) {
   const [game, setGame] = useState(null);
   const [rounds, setRounds] = useState([]);
   const [lastRoundStatus, setLastRoundStatus] = useState(null);
-  const [playerNames, setPlayerNames] = useState({});
+  const [playerInfo, setPlayerNames] = useState({}); 
 
   console.log('game:', game);
 
 
   useEffect(() => {
     const fetchPlayerNames = async () => {
-      const names = {};
+      const playerInfo = {};
       for (const player of game.players) {
         const playerId = player._id;        
         try {
           const res = await axios.get(`/api/users/${playerId}`);
-          console.log(`Fetched data for ${playerId}:`, res.data);  // Debug line
           if (res.data && res.data.name) {
-            names[playerId] = res.data.name;
+            playerInfo[playerId] = { name: res.data.name, avatar: res.data.avatar };
+            console.log('res.data', res.data)
+            console.log('res.data.name', res.data.name)
+            console.log('res.data.avatar', res.data.avatar)
           }
         } catch (error) {
-          console.error(`Error fetching name for player ${playerId}: ${error}`);
+          console.error(`Error fetching info for player ${playerId}: ${error}`);
         }
       }
-      console.log("Setting player names:", names);  // Debug line
-      setPlayerNames(names);
+      setPlayerNames(playerInfo);
     };
     
     if (game && game.players) {
@@ -205,7 +206,14 @@ export default function GameDetailPage({ games, setGames }) {
           <h2>Final Scores:</h2>
           <ol>
             {sortedPlayers.map(([playerId, score], index) => (
-              <li key={index}>{`${playerNames[playerId] || playerId}: ${score}`}</li>
+              <li key={index}>
+                <img 
+                  src={playerInfo[playerId]?.avatar || 'https://lh3.googleusercontent.com/a/AAcHTtdbTbALAxVdem0qmeAHIwErhMxZo1n4FTscpp9oWHQIPhsV=s288-c-no'} 
+                  alt={`${playerInfo[playerId]?.name || playerId}'s avatar`} 
+                  height="40px" 
+                />
+                {`: ${playerInfo[playerId]?.name || playerId}: ${score}`}
+              </li>
             ))}
           </ol>
         </div>

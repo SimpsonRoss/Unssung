@@ -41,7 +41,7 @@ async function create(req, res) {
 
 async function getUser(req, res) {
   try {
-    const user = await User.findById(req.params.id).select('name'); // Fetch only the 'name' field
+    const user = await User.findById(req.params.id).select('name avatar'); // Fetch 'name' and 'avatar' fields
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
