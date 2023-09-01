@@ -120,7 +120,12 @@ export default function App() {
       <main className='MainApp'>
         <>
             <Routes>
-              <Route path="/games" element={<AllGamesPage games={games} setGames={setGames} />} />
+              <Route path="/" element={<AllGamesPage games={games} setGames={setGames} />} />
+
+              {/* <Route path="/"><Redirect to="/games" /></Route> */}
+
+              <Route path="/games" element={<AllGamesPage games={games} setGames={setGames} />} /> 
+              {/* FIND ALL PLACES WITH /GAMES AND REMOVE ^^^ */}
               <Route
               path="/games/:id"
               element={<GameDetailPage games={games} setGames={setGames} />}
@@ -139,8 +144,9 @@ export default function App() {
 
     </div>
 
-    { user ? 
-    <nav className="navbar fixed-bottom navbar-expand-lg bg-black pe-5">
+    {/* { user ?  */}
+    <nav className={`navbar fixed-bottom navbar-expand-lg bg-black pe-5 ${user ? '' : 'hidden' }`}>
+
       <div className="container-fluid">
 
           <button type="button" id="sidebarCollapse" className="btn btn-outline-light">
@@ -168,7 +174,8 @@ export default function App() {
             </svg>
           </Link></div>
       </div>
-    </nav> : null }
+    </nav> 
+    {/* : null } */}
   </div>
      
       {/* <footer className='darkCenter'>

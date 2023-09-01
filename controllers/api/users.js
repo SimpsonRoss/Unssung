@@ -30,6 +30,9 @@ async function login(req, res) {
 async function create(req, res) {
   try {
     const user = await User.create(req.body);
+    // Set user id to the session so it can be used later
+    req.session.userId = user._id;
+    console.log('req.session.userId:', req.session.userId);
     const token = createJWT(user);
     // The token is a string, but yes, we can
     // res.json a string
@@ -41,7 +44,7 @@ async function create(req, res) {
 
 async function getUser(req, res) {
   try {
-    const user = await User.findById(req.params.id).select('name avatar'); // Fetch 'name' and 'avatar' fields
+    const user = await User.findById(req.params.id).select('name avatar spotifyAccessToken spotifyRefreshToken'); 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }

@@ -171,7 +171,7 @@ export default function GameDetailPage({ games, setGames }) {
     <div>
       <h1 className='mt-3 mb-3'>{game.title}</h1>
       <hr />
-      <h4 className='mb-4'>Game is {(game.status === 'New') || (game.status === 'InProgress') ? <span className='text-success'>Live</span> : <span className='text-danger'>Over</span>}</h4>
+      <h4 className='mb-4'>Game is {(game.status === 'New') || (game.status === 'InProgress') ? <span className='text-success'>live</span> : <span className='text-danger'>over</span>}</h4>
       <section className='mb-4'>
       <h2 className='mb-1'>Rounds: {game.roundCount}</h2>
         { (game.status !== 'Finished') ?
@@ -183,7 +183,7 @@ export default function GameDetailPage({ games, setGames }) {
         }
       </section>
       <section className='mb-2'>
-      <h2 className='mb-1'>Days per Round: {game.roundDuration}</h2>
+      <h2 className='mb-1'>Days per round: {game.roundDuration}</h2>
         { (game.status !== 'Finished') ?
         <>
         <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundDuration(-1)} disabled={game.roundDuration <= 1}>- 1 Day</button>
@@ -208,9 +208,9 @@ export default function GameDetailPage({ games, setGames }) {
       }
       { (game.status === 'New') ?
       <>
-      <h4 className='mb-2'>Invite Code: </h4>
+      <h4 className='mb-2'>Invite code: </h4>
       <h4 className='mb-4 text-success'>{game.uniqueCode}</h4>
-      {game.status === 'New' && game.players.length > 2 && <button className="btn btn-outline-light" onClick={startGame}>Start Game</button>}
+      {game.status === 'New' && game.players.length > 2 && <button className="btn btn-outline-light" onClick={startGame}>Start game</button>}
       </>
       : null
       }
@@ -235,14 +235,14 @@ export default function GameDetailPage({ games, setGames }) {
       {game.status === 'InProgress' && 
       lastRoundFinished && 
       game.roundsArray.length === game.roundCount && (
-        <button className="btn btn-outline-light" onClick={finishGame}>Finish Game</button>
+        <button className="btn btn-outline-light" onClick={finishGame}>Finish game</button>
       )}
 
       
     {/* Show the sorted players */}
     {game.status === 'Finished' && (
       <div>
-        <h2 className='mt-3 mb-3'>Final Scores:</h2>
+        <h2 className='mt-3 mb-3'>Final scores:</h2>
         <ol className='list-group'>
           {sortedPlayers.map(([playerId, score], index) => {
             const place = index + 1;

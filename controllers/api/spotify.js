@@ -68,8 +68,7 @@ async function handleSpotifyRedirect(req, res) {
       }, { new: true });
     }
 
-    // Do other things, such as storing the tokens in the session, etc.
-    res.redirect('http://localhost:3000?session_id=YourSecureSessionID');
+    res.redirect('http://localhost:3000/account?session_id=YourSecureSessionID');
   } catch (err) {
     console.error(err);
     res.status(400).send('Spotify login failed.');
@@ -110,7 +109,9 @@ async function refreshAccessToken(userId) {
 
 
 async function getTopTracks(req, res) {
+  console.log('Session data in getTopTracks:', req.session)
   let user = await User.findById(req.session.userId);
+  console.log('User in getTopTracks:', user);
   let token = user.spotifyAccessToken;
 
   async function attemptTopTracksFetch() {
@@ -148,7 +149,9 @@ async function getTopTracks(req, res) {
 
 
 async function getCurrentUserProfile(req, res) {
+  console.log('req.session.userId in getCurrentUserProfile:', req.session.userId);
   let user = await User.findById(req.session.userId);
+  console.log('User in getCurrentUserProfile:', user);
   let token = user.spotifyAccessToken;
 
   async function attemptUserProfileFetch() {

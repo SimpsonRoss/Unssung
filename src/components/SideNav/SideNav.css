@@ -152,3 +152,7 @@ hr {
   border: solid 2px white;
   margin: 1vmin;
 }
+
+.hidden {
+  display: none !important;
+}

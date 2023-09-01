@@ -46,7 +46,7 @@ export default function AllGamesPage({ games, setGames }) {
       <hr />
    
       {/* New and In Progress Games */}
-      <h2 className='mt-5'>Current Games</h2>
+      <h2 className='mt-5'>Current games</h2>
       <div className="game-row d-flex flex-row flex-nowrap">
         {currentGames.length > 0 ? currentGames.map((game, idx) => (
           <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
@@ -54,7 +54,7 @@ export default function AllGamesPage({ games, setGames }) {
       </div>
       <br />
       {/* Finished Games */}
-      <h2>Past Games</h2>
+      <h2>Past games</h2>
       <div className="game-row d-flex flex-row flex-nowrap">
         {finishedGames.length > 0 ? finishedGames.map((game, idx) => (
           <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
@@ -64,8 +64,8 @@ export default function AllGamesPage({ games, setGames }) {
       <br />
       
       <div className="w-100">
-  <button className="btn btn-outline-light mt-2 equal-width-button" onClick={handleOpenCreateModal}>Create New Game</button>
-  <button className="btn btn-outline-light mt-2 equal-width-button" onClick={handleOpenJoinModal}>Join Game</button>
+  <button className="btn btn-outline-light mt-2 equal-width-button" onClick={handleOpenCreateModal}>Create new game</button>
+  <button className="btn btn-outline-light mt-2 equal-width-button" onClick={handleOpenJoinModal}>Join game</button>
 </div>
 
       <CreateGameModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
