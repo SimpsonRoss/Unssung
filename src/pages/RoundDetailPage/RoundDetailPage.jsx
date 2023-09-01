@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import TrackSubmissionForm from '../../components/TrackSubmissionForm/TrackSubmissionForm';
 import SongScoreForm from '../../components/SongScoreForm/SongScoreForm';
 import axios from 'axios';
+import { apiURLBackend, apiURLFrontend } from '../../utilities/config.js';
+
 
 export default function RoundDetailPage({user}) {
   const { id } = useParams(); // id is the round id
@@ -75,7 +77,7 @@ export default function RoundDetailPage({user}) {
     };
     
     try {
-      const response = await axios.post('http://localhost:5001/api/spotify/create-playlist-api', playlistInfo, { withCredentials: true });
+      const response = await axios.post(`${apiURLBackend}/api/spotify/create-playlist-api`, playlistInfo, { withCredentials: true });
       setPlaylistId(response.data.playlistId);
       console.log(`Created playlist`);
       setSavedPlaylist(true);

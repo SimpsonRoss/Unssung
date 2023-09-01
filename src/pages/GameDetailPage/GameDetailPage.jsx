@@ -177,7 +177,7 @@ export default function GameDetailPage({ games, setGames }) {
         { (game.status !== 'Finished') ?
         <>
         <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundCount(-1)} disabled={game.roundCount <= 1}>- 1 Round</button>
-        <button className="btn btn-outline-light equal-width-button" onClick={() => updateRoundCount(1)}>+ 1 Round</button>
+        <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundCount(1)}>+ 1 Round</button>
         </>
         : null 
         }
@@ -187,7 +187,7 @@ export default function GameDetailPage({ games, setGames }) {
         { (game.status !== 'Finished') ?
         <>
         <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundDuration(-1)} disabled={game.roundDuration <= 1}>- 1 Day</button>
-        <button className="btn btn-outline-light equal-width-button" onClick={() => updateRoundDuration(1)}>+ 1 Day</button>
+        <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundDuration(1)}>+ 1 Day</button>
         </>
         : null 
         }

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { apiURLBackend, apiURLFrontend } from '../../utilities/config.js';
+
 
 export default function ProfilePage({ user, setUser }) {
   const [topTracks, setTopTracks] = useState(null);
@@ -7,7 +9,7 @@ export default function ProfilePage({ user, setUser }) {
   const fetchUserData = async () => {
     console.log('RUNNING')
     try {
-      const res = await fetch('http://localhost:3000/api/users/' + user._id, {
+      const res = await fetch(`${apiURLFrontend}/api/users/${user._id}`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -24,7 +26,7 @@ export default function ProfilePage({ user, setUser }) {
 
   const handleSpotifyAuth = () => {
     sessionStorage.setItem('justAuthenticatedWithSpotify', 'true');
-    window.location = 'http://localhost:5001/api/spotify/login';
+    window.location = `${apiURLBackend}/api/spotify/login`;
   };
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function ProfilePage({ user, setUser }) {
   useEffect(() => {
     const fetchTopTracks = async () => {
       try {
-        const res = await fetch('http://localhost:5001/api/spotify/top-tracks', {
+        const res = await fetch(`${apiURLBackend}/api/spotify/top-tracks`, {
           method: 'GET',
           credentials: 'include'  // Important
         });
@@ -56,7 +58,7 @@ export default function ProfilePage({ user, setUser }) {
     const fetchUserProfile = async () => {
       setLoading(true);
       try {
-        const res = await fetch('http://localhost:5001/api/spotify/me', {
+        const res = await fetch(`${apiURLBackend}/api/spotify/me`, {
           method: 'GET',
           credentials: 'include'
         });

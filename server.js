@@ -11,19 +11,33 @@ require('./config/cronJobs'); // Importing the cron jobs
 
 const app = express();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(logger('dev'));
 app.use(express.json());
 
+// Dynamic CORS Configuration
+const corsOrigin = isProduction ? 'https://trkr8-9a9586e5bb16.herokuapp.com' : 'http://localhost:3000';
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: corsOrigin,
   credentials: true
 }));
 
-app.use(session({
+// Dynamic Session Configuration
+const sessionConfig = {
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true
-}));
+  saveUninitialized: true,
+};
+
+if (isProduction) {
+  sessionConfig.cookie = {
+    secure: true, // Ensure cookies are only sent over HTTPS in production
+    // any other production-only settings
+  };
+}
+
+app.use(session(sessionConfig));
 
 app.use(favicon(path.join(__dirname, 'build', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'build')));
@@ -31,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 // Middleware to verify token and assign user object of payload to req.user.
 app.use(require('./config/checkToken'));
 
-// Put all API routes here (before the catch-all)
+// API routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/spotify', require('./routes/api/spotify'));
 app.use('/api/games', require('./routes/api/games'));

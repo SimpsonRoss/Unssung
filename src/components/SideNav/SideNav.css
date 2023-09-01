@@ -18,8 +18,8 @@ align-items: stretch;
   min-height: 100vh;
   color: #fff;
   transition: all 0.3s;
-  position: fixed; /* or absolute based on your need */
-  z-index: 1; /* Higher z-index so that it floats above */
+  position: fixed; 
+  z-index: 1;
 }
 
 .navbar.fixed-bottom {

@@ -50,13 +50,6 @@ async function handleSpotifyRedirect(req, res) {
 
     const { access_token, refresh_token, expires_in } = response.data;
 
-    // commenting out whilst testing
-    // if (req.user) {
-    //   const expirationTime = new Date().getTime() + expires_in * 1000;
-    //   console.log('Updating user ' + req.user._id + ' with Spotify tokens');
-
-    // Using req.session.userId instead of req.user._id for testing, because I'm having trouble accessing req.user._id
-    // from the JWT token once spotify redirects back, so instead I apply the id to the session at login
     if (true) {
       const expirationTime = new Date().getTime() + expires_in * 1000;
       console.log('Updating user ' + req.session.userId + ' with Spotify tokens');
@@ -68,7 +61,7 @@ async function handleSpotifyRedirect(req, res) {
       }, { new: true });
     }
 
-    res.redirect('http://localhost:3000/account?session_id=YourSecureSessionID');
+    res.redirect(`${process.env.FRONTEND_URL}/account?session_id=YourSecureSessionID`);
   } catch (err) {
     console.error(err);
     res.status(400).send('Spotify login failed.');

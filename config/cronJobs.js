@@ -13,7 +13,6 @@ const updateRoundStatus = async () => {
   let rounds = await RoundModel.find({ status: 'SongPick', songPickDeadline: { $lt: new Date() }});
   
   for (const round of rounds) {
-    // ... (existing code for this transition, as you already implemented)
     const nonSubmitters = round.players.map(player => player.toString());
     for (const submission of round.trackSubmissions) {
       const index = nonSubmitters.indexOf(submission.player.toString());
