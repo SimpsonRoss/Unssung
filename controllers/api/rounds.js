@@ -1,5 +1,6 @@
 const Round = require('../../models/round');
 const Game = require('../../models/game');
+const User = require('../../models/user');
 
 exports.createRound = async (req, res) => {
   try {
@@ -109,21 +110,47 @@ exports.submitScores = async (req, res) => {
   }
 };
 
-exports.revealScores = async (req, res) => {
-  const { id } = req.params; // Round ID
 
+exports.revealScores = async (req, res) => {
+  const { id } = req.params;
   try {
     const round = await Round.findById(id);
     
     if (round.status !== 'RevealScore') {
       return res.status(400).json({ message: 'Cannot reveal scores at this stage' });
     }
-    
+
+    let winnerSubmission = null;
+    let highestScore = -1;
+
+    for (const submission of round.trackSubmissions) {
+      const totalScore = submission.scores.reduce((acc, score) => acc + score, 0);
+      if (totalScore > highestScore) {
+        highestScore = totalScore;
+        winnerSubmission = submission;
+      }
+    }
+
+    console.log('winnerSubmission', winnerSubmission);  // Debugging line
+
+    if (winnerSubmission) {
+      const winnerUser = await User.findById(winnerSubmission.player);
+      if (winnerUser && winnerUser.name) {
+        console.log('winnerUser', winnerUser); // Debugging line
+        round.winner = winnerUser.name;
+        
+        // Save the round immediately after updating the winner
+        await round.save();
+      }
+    }
+
     round.status = 'Finished';
     await round.save();
-    
+
     res.status(200).json(round);
   } catch (error) {
+    console.log("Error in revealScores:", error);  // Debugging line
     res.status(400).json({ error });
   }
 };
+

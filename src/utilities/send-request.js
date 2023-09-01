@@ -14,7 +14,7 @@ export default async function sendRequest(url, method = 'GET', payload = null) {
   
   const token = getToken();
   if (token) {
-    console.log('Token exists:', token);
+    // console.log('Token exists:', token);
     options.headers = options.headers || {};
     options.headers.Authorization = `Bearer ${token}`;
   }

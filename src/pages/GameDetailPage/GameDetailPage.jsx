@@ -11,7 +11,7 @@ export default function GameDetailPage({ games, setGames }) {
   const [lastRoundStatus, setLastRoundStatus] = useState(null);
   const [playerInfo, setPlayerNames] = useState({}); 
 
-  console.log('game:', game);
+  // console.log('game:', game);
 
 
   useEffect(() => {
@@ -23,9 +23,9 @@ export default function GameDetailPage({ games, setGames }) {
           const res = await axios.get(`/api/users/${playerId}`);
           if (res.data && res.data.name) {
             playerInfo[playerId] = { name: res.data.name, avatar: res.data.avatar };
-            console.log('res.data', res.data)
-            console.log('res.data.name', res.data.name)
-            console.log('res.data.avatar', res.data.avatar)
+            // console.log('res.data', res.data)
+            // console.log('res.data.name', res.data.name)
+            // console.log('res.data.avatar', res.data.avatar)
           }
         } catch (error) {
           console.error(`Error fetching info for player ${playerId}: ${error}`);
@@ -223,15 +223,13 @@ export default function GameDetailPage({ games, setGames }) {
         </button>
       )}
 
-<div className="game-row d-flex flex-row flex-nowrap">
-            {game.roundsArray && game.roundsArray.length > 0 ?
-                game.roundsArray.map((round, idx) => {
-                    return <RoundCard id={round} idx={idx+1} key={idx} />;
-                })
-                :
-                null
-            }
-        </div>
+      <div className="game-row d-flex flex-row flex-nowrap">
+        {game.roundsArray && game.roundsArray.length > 0
+          ? [...game.roundsArray].reverse().map((round, idx, arr) => {
+              return <RoundCard id={round} idx={arr.length - idx} key={idx} />;
+            })
+          : null}
+      </div>
 
       {/* Logic for showing 'Finish Game' button */}
       {game.status === 'InProgress' && 

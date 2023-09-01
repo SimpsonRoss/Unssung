@@ -19,10 +19,7 @@ const roundSchema = new Schema({
     gameTitle: { type: String },
     songPickDeadline: { type: Date, required: true },
     songScoreDeadline: { type: Date, required: true },
+    winner: { type: String, default: '' },
 }, { timestamps: true });
-
-// function dateValidator(value) {
-//   return value > new Date();
-// }
 
 module.exports = mongoose.model('Round', roundSchema);
