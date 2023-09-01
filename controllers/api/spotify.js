@@ -27,13 +27,20 @@ function initiateSpotifyLogin(req, res) {
 
 async function handleSpotifyRedirect(req, res) {
   console.log('Handling Spotify redirect. req.user:', req.session.userId);
-  const { code } = req.query;
+  if (!req.session.userId) {
+    console.error("Session userId not found");
+    res.status(400).send("Session userId not found. Please log in.");
+    return;
+  }
 
+  const { code } = req.query;
   if (!code) {
     console.error("No code received");
     res.status(400).send('No code received from Spotify. Login failed.');
     return;
   }
+  
+
 
   try {
     const response = await axios.post('https://accounts.spotify.com/api/token', qs.stringify({
@@ -102,10 +109,28 @@ async function refreshAccessToken(userId) {
 
 
 async function getTopTracks(req, res) {
-  console.log('Session data in getTopTracks:', req.session)
+  console.log('Session data in getTopTracks:', req.session);
+
+  if (!req.session.userId) {
+    console.error("Session userId not found");
+    res.status(400).send("Session userId not found. Please log in.");
+    return;
+  }
+
   let user = await User.findById(req.session.userId);
-  console.log('User in getTopTracks:', user);
+  if (!user) {
+    console.error("User not found");
+    res.status(400).send("User not found. Please log in.");
+    return;
+  }
+
   let token = user.spotifyAccessToken;
+  if (!token) {
+    console.error("No Spotify access token found");
+    res.status(400).send("No Spotify access token found. Please log in again.");
+    return;
+  }
+  
 
   async function attemptTopTracksFetch() {
     try {
@@ -143,9 +168,26 @@ async function getTopTracks(req, res) {
 
 async function getCurrentUserProfile(req, res) {
   console.log('req.session.userId in getCurrentUserProfile:', req.session.userId);
+
+  if (!req.session.userId) {
+    console.error("Session userId not found");
+    res.status(400).send("Session userId not found. Please log in.");
+    return;
+  }
+
   let user = await User.findById(req.session.userId);
-  console.log('User in getCurrentUserProfile:', user);
+  if (!user) {
+    console.error("User not found");
+    res.status(400).send("User not found. Please log in.");
+    return;
+  }
+
   let token = user.spotifyAccessToken;
+  if (!token) {
+    console.error("No Spotify access token found");
+    res.status(400).send("No Spotify access token found. Please log in again.");
+    return;
+  }
 
   async function attemptUserProfileFetch() {
     try {
@@ -188,6 +230,11 @@ async function createPlaylistAPI(req, res) {
 
   const { tracksUri, roundNumber, gameTitle, songScoreDeadline } = req.body;
 
+  if (!tracksUri || !roundNumber || !gameTitle || !songScoreDeadline) {
+    console.error("Missing parameters in request body");
+    res.status(400).send("Missing parameters in request body.");
+    return;
+  }
   // console.log('Session data in createPlaylistAPI:', req.session);
 
   // const user = await User.findById('64e8b0111ed7711eef7ec075'); //TEMP HARD CODED FOR EASE OF TESTING
