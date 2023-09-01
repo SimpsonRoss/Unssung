@@ -41,6 +41,31 @@ export default function App() {
     }
     getGames();
   }, [user]);
+
+  const greetings = [
+    'Hola', // Spanish
+    'Bonjour', // French
+    'Hallo', // German
+    'Ciao', // Italian
+    'Olá', // Portuguese
+    'Hej', // Swedish
+    'Howdy',
+    'Oi',
+    'Aloha',
+    'Heya',
+    'Sup',
+    'Yo',
+    'Hi',
+    'EhUp',
+    'Salut',
+    'Hei',
+    'Zdrav',
+  ];
+
+  const getRandomGreeting = () => {
+    const randomIndex = Math.floor(Math.random() * greetings.length);
+    return greetings[randomIndex];
+  };
   
 
   return (
@@ -52,8 +77,7 @@ export default function App() {
       { user ?  
       <nav id="sidebar">
         <div className="sidebar-header">
-          {/* <h3>Hi { user.name }!</h3> */}
-          <h3>Hola Pepsi cola!</h3>
+          <h3>{getRandomGreeting()} { user.name }!</h3>
         </div>
 
         <ul className="list-group list-group-flush">
