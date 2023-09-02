@@ -26,18 +26,25 @@ export default function TrackSubmissionForm({ roundId, userId, onSuccess }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        type="text" 
-        value={songURL}
-        onChange={(e) => {
-          setSongURL(e.target.value);
-          setIsValid(true); // Reset validation state upon input change
-        }}
-        placeholder="Enter Spotify URL"
-      />
-      <button type="submit">Submit</button>
-      {!isValid && <p>songs must be submitted in URL format like this https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=6d48998463ff4bac</p>}
+    <form className="darkCenter" autoComplete="off" onSubmit={handleSubmit}>
+      <div className="form-floating mt-2">
+        <input 
+          className='form-control mt-2'
+          name="songURL"
+          type="text" 
+          placeholder='URL'
+          required
+          value={songURL}
+          onChange={(e) => {
+            setSongURL(e.target.value);
+            setIsValid(true); // Reset validation state upon input change
+          }}
+        />
+        <label>Spotify Song URL</label>
+      </div>
+      <br />
+      <button className='btn btn-outline-light mb-4' type="submit">Submit</button>
+      {!isValid && <p className='px-4 text-warning'>songs must be submitted in URL format like this https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=6d48998463ff4bac</p>}
     </form>
   );
 }

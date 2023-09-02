@@ -167,7 +167,8 @@ async function getTopTracks(req, res) {
 
 
 async function getCurrentUserProfile(req, res) {
-  console.log('req.session.userId in getCurrentUserProfile:', req.session.userId);
+  
+  console.log('GETTING PROFILE req.session.userId in getCurrentUserProfile:', req.session.userId);
 
   if (!req.session.userId) {
     console.error("Session userId not found");
@@ -230,24 +231,23 @@ async function createPlaylistAPI(req, res) {
 
   const { tracksUri, roundNumber, gameTitle, songScoreDeadline } = req.body;
 
+  // Guard rails incase the request body is missing parameters
   if (!tracksUri || !roundNumber || !gameTitle || !songScoreDeadline) {
     console.error("Missing parameters in request body");
     res.status(400).send("Missing parameters in request body.");
     return;
   }
-  // console.log('Session data in createPlaylistAPI:', req.session);
-
-  // const user = await User.findById('64e8b0111ed7711eef7ec075'); //TEMP HARD CODED FOR EASE OF TESTING
+  // Guard rails incase the user is not logged in or the user is not found
   const user = await User.findById(req.session.userId);
   if (!user) {
     return res.status(400).send('User not found.');
   }
+  // Get the current token from the user
+  let token = user.spotifyAccessToken;  
 
-  let token = user.spotifyAccessToken;  // Get the current token from the user
-
+  // Creating the playlist name and description
   const playlistName = `Round ${roundNumber} - ${gameTitle}`;
-  const playlistDescription = `Deadline to rate songs: ${new Date(songScoreDeadline).toLocaleString()}. Love from trkR8.`;
-
+  const playlistDescription = `Deadline to rate songs: ${new Date(songScoreDeadline).toLocaleString()}. Love from Unssung.`;
 
   async function attemptPlaylistCreation() {
     try {
@@ -255,6 +255,7 @@ async function createPlaylistAPI(req, res) {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
+      // Make the request to create the playlist, adding the user id to the url
       const { data: playlist } = await axios.post(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
         "name": playlistName,
         "description": playlistDescription,
@@ -262,7 +263,7 @@ async function createPlaylistAPI(req, res) {
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-
+      // Add the tracks from the round into the playlist
       await axios.post(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
         uris: tracksUri
       }, {
@@ -272,7 +273,7 @@ async function createPlaylistAPI(req, res) {
       res.status(200).json({ playlistId: playlist.id });
 
     } catch (error) {
-      // Check if token is expired (status code 401)
+      // Check if the Spotify access token is expired and if so refresh it
       if (error.response && error.response.status === 401) {
         const refreshResult = await refreshAccessToken(user._id);
         if (refreshResult.status !== 200) {
@@ -280,13 +281,12 @@ async function createPlaylistAPI(req, res) {
           return;
         }
         token = refreshResult.access_token;  // Update the token
-        return attemptPlaylistCreation();  // Retry the function
+        return attemptPlaylistCreation();  // Retry the function with the new token
       } else {
         console.error("Spotify API error:", error.response ? error.response.data : error);
         res.status(500).send('Internal Server Error');
       }
     }
   }
-
   await attemptPlaylistCreation();  // Initial attempt
 }

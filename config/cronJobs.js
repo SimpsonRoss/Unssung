@@ -2,8 +2,8 @@
 
 const cron = require('node-cron');
 const mongoose = require('mongoose');
-const RoundModel = require('../models/round'); // Adjust path as needed
-
+const RoundModel = require('../models/round'); 
+// Rick Astley - Never Gonna Give You Up
 const defaultSongId = "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=e59e07d581be4e26";
 
 const updateRoundStatus = async () => {
@@ -48,5 +48,5 @@ const updateRoundStatus = async () => {
   }
 };
 
-// Run the job every minute, adjust as needed
+// Run the job every minute
 cron.schedule('* * * * *', updateRoundStatus);

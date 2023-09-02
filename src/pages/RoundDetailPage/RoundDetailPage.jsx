@@ -1,3 +1,5 @@
+// src/pages/RoundDetailPage/RoundDetailPage.jsx
+
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import TrackSubmissionForm from '../../components/TrackSubmissionForm/TrackSubmissionForm';
@@ -13,7 +15,29 @@ export default function RoundDetailPage({user}) {
   const [playlistId, setPlaylistId] = useState(null);
   const [savedPlaylist, setSavedPlaylist] = useState(false);
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
+  const [playerInfo, setPlayerInfo] = useState({});
 
+  useEffect(() => {
+    const fetchPlayerNames = async () => {
+      const playerInfo = {};
+      for (const submission of round.trackSubmissions) {
+        const playerId = submission.player;
+        try {
+          const res = await axios.get(`/api/users/${playerId}`);
+          if (res.data && res.data.name) {
+            playerInfo[playerId] = { name: res.data.name, avatar: res.data.avatar };
+          }
+        } catch (error) {
+          console.error(`Error fetching info for player ${playerId}: ${error}`);
+        }
+      }
+      setPlayerInfo(playerInfo);
+    };
+
+    if (round) {
+      fetchPlayerNames();
+    }
+  }, [round]);
 
   useEffect(() => {
     const fetchRound = async () => {
@@ -40,14 +64,27 @@ export default function RoundDetailPage({user}) {
     return <div>Loading...</div>;
   }
 
-  // console.log(`track submissions: ${JSON.stringify(round.trackSubmissions)}`);
-
   const userSubmission = round.trackSubmissions.find(
     (submission) => submission.player.toString() === user._id.toString()
   );
 
   const userHasSubmitted = Boolean(userSubmission);
 
+  // Get the right suffix for the scores (e.g. 1st, 2nd, 3rd, 4th)
+  const getNumberSuffix = (n) => {
+    const j = n % 10;
+    const k = n % 100;
+    if (j === 1 && k !== 11) {
+      return 'st';
+    }
+    if (j === 2 && k !== 12) {
+      return 'nd';
+    }
+    if (j === 3 && k !== 13) {
+      return 'rd';
+    }
+    return 'th';
+  };
 
   const revealScores = async () => {
     try {
@@ -92,68 +129,109 @@ export default function RoundDetailPage({user}) {
   const songScoreDeadline = new Date(round.songScoreDeadline);
 
   return (
-    <div>
-      <h1>Round {round.roundNumber} Details</h1>
-      <p>Game: {round.gameTitle}</p>
-      <p>Status: {round.status}</p>
-      <p>Duration: {round.duration} days</p>
-      <p>Start Date: {startDate.toLocaleString()}</p>
-      <p>Deadline to submit song: {songPickDeadline.toLocaleString()}</p>
-      <p>Deadline to rate songs: {songScoreDeadline.toLocaleString()}</p>
+    <div className="container roundContainer">
+      <h1 className='mt-3 mb-3'>Round {round.roundNumber} Details</h1>
+      <hr />
+      <h4 className='mb-4'>Game: {round.gameTitle}</h4>
+      <h4 className='mb-4'>Status: {round.status}</h4>
+      <h4 className='mb-4'>Duration: {round.duration} days</h4>
+      { round.status === 'SongPick' ?
+      <>
+        <h4 className='mb-2'>Deadline to submit song: </h4>
+        <h4>{songPickDeadline.toLocaleString()}</h4>
+      </>
+      : null 
+      }
+      { round.status === 'SongScore' ?
+      <>
+        <h4 className='mb-2'>Deadline to rate songs: </h4>
+        <h4>{songScoreDeadline.toLocaleString()}</h4>
+      </>
+      : null 
+      }
       {
         (!userHasSubmitted && !submissionSuccess) ? 
         <TrackSubmissionForm roundId={id} userId={user._id} onSuccess={handleSuccessfulSubmit} />
-        : <p>Song Submitted!</p>
+        : 
+        <>
+        <h4 className='mb-2'>Song submitted:</h4>
+        {/* COMMENTING OUT WHILST DEBUGGING THE SONG SUBMIT ERROR */}
+        {/* <p className='mb-4'><a href={userSubmission.songId} target="_blank" rel="noopener noreferrer">{userSubmission.songId}</a></p> */}
+        </>
       }
+
       {
-        userHasSubmitted && <p>Your Song Submission: <a href={userSubmission.songId} target="_blank" rel="noopener noreferrer">{userSubmission.songId}</a></p>
+        (round.status !== 'SongPick') && (!savedPlaylist) && <button className='btn btn-outline-light mt-2 mb-4' onClick={savePlaylistToSpotify}>Save playlist to Spotify</button>
       }
+      <br />
+
+      { (round.status !== 'SongPick') && (savedPlaylist) && <iframe
+        title="Spotify Embed: Recommendation Playlist "
+        src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
+        width="100%"
+        height="200%"
+        style={{ minHeight: '180px' }}
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      />}
+
       {
         (round.status === 'SongScore') ?
-        !scoreSubmitted ? // <-- Check if scores have been submitted
+        !scoreSubmitted ? 
           <SongScoreForm 
             trackSubmissions={round.trackSubmissions} 
             userId={user._id} 
             roundId={id} 
-            onSuccess={handleScoreSubmitSuccess} // <-- Call this function when scores are submitted
+            onSuccess={handleScoreSubmitSuccess} 
           />
-          : <p>Scores Submitted!</p> // <-- Display this message if scores have been submitted
+          : <p className='text-success1'>Scores submitted!</p> 
         : null
-      }
-      {
-        (round.status !== 'SongPick') && (!savedPlaylist) && <button onClick={savePlaylistToSpotify}>Save to Spotify</button>
       }
 
       {
-        (round.status === 'RevealScore') && <button onClick={revealScores}>Reveal Scores</button>
+        (round.status === 'RevealScore') && <button className='btn btn-outline-light mb-4' onClick={revealScores}>Reveal Scores</button>
       }
-      {
+ {
         (round.status === 'Finished') &&
         <div>
-          <h2>Final Scores:</h2>
+          <h2 className='mt-2 mb-3'>Final Scores:</h2>
+          <ul className='list-group list-unstyled'>
           {
             round.trackSubmissions.sort((a, b) => {
               const totalA = a.scores.reduce((acc, score) => acc + score, 0);
               const totalB = b.scores.reduce((acc, score) => acc + score, 0);
               return totalB - totalA;
-            }).map(submission => (
-              <p key={submission.songId}>
-                {submission.songId} - Player: {submission.player === userSubmission.player ? "YOU" : submission.player} - Total Score: {submission.scores.reduce((acc, score) => acc + score, 0)}
-              </p>
-            ))
-          }
+            }).map((submission, index) => {
+              const place = index + 1;
+              const suffix = getNumberSuffix(place);
+              return (
+                <li className='list-group-item-dark mb-3' key={submission.songId}>
+                  <img className='miniPhoto mb-2'
+                    src={playerInfo[submission.player]?.avatar || 'https://lh3.googleusercontent.com/a/AAcHTtdbTbALAxVdem0qmeAHIwErhMxZo1n4FTscpp9oWHQIPhsV=s288-c-no'}
+                    alt={`${playerInfo[submission.player]?.name || submission.player}'s avatar`}
+                    height="40px"
+                  />
+                  <h3>
+                    {place}{suffix} Place - 
+                    <span> {playerInfo[submission.player]?.name || "Unknown"}</span>
+                  </h3>
+                  <h5>
+                    Score: {submission.scores.reduce((acc, score) => acc + score, 0)}
+                  </h5>
+                    {submission.songId}
+                </li>
+              );
+            })}
+            </ul>
+
         </div>
       }
-      { (round.status !== 'SongPick') && (savedPlaylist) && <iframe
-        title="Spotify Embed: Recommendation Playlist "
-        src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
-        width="100%"
-        height="100%"
-        style={{ minHeight: '360px' }}
-        frameBorder="0"
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"
-      />}
+    <br />
+    <br />
+    <br />
+    <br />
+
     </div>
   );
 }

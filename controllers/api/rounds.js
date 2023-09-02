@@ -94,12 +94,13 @@ exports.submitScores = async (req, res) => {
       }
     });
 
-    // Count the number of scores submitted for the first song
-    const firstSong = round.trackSubmissions[0];
-    const numScoresForFirstSong = firstSong ? firstSong.scores.length : 0;
-
     // Check if all players have submitted their scores
-    if (numScoresForFirstSong === round.players.length - 1) {
+    const allSongsScored = round.trackSubmissions.every(submission => {
+      return submission.scores.length === round.players.length - 1;
+    });
+
+    // If all songs have been scored by all players, update the round status
+    if (allSongsScored) {
       round.status = 'RevealScore';
     }
 
@@ -109,6 +110,7 @@ exports.submitScores = async (req, res) => {
     res.status(400).json({ error });
   }
 };
+
 
 
 exports.revealScores = async (req, res) => {

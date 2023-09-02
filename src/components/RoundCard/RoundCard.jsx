@@ -61,8 +61,17 @@ export default function RoundCard({ id, idx }) {
         </>
         : 
         <>
+        {round.status === 'Finished' ?
+        <>
         <p>Winner:</p>
         <p>{round.winner}</p>
+        </>
+        : 
+        <>
+        <p>Scores ready!</p>
+        <p>... lets go.</p>
+        </>
+         }
         </>
         }
       </div>

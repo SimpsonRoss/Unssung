@@ -52,7 +52,7 @@ export default function CreateGameModal({ isOpen, onClose }) {
                 <input type="number" className="form-control" name="daysPerRound" placeholder="Enter days per round" value={roundDuration} onChange={(e) => setRoundDuration(e.target.value)} />
                 <label>Days</label>
               </div>
-              <p>pssst... the average is 5 rounds, at 7 days per round. Plus you can adjust these later.</p>
+              <p>pssst... the average is 4 rounds of 7 days.</p>
             </form>
           </div>
           <div className="modal-footer">

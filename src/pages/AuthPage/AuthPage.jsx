@@ -8,8 +8,8 @@ export default function AuthPage({ setUser }) {
   const [showSignUp, setShowSignUp] = useState(false);
   return (
     <section className='darkCenter authMargin'>
-      <h1 className='light'>TRKR8</h1>
-      <h3 className='light'>The worlds most popular music game.</h3>
+      <h1 className='light'>Unssung</h1>
+      <h3 className='light'>The best tracks you've never heard.</h3>
       <br />
       <p className='light'>please sign in or sign up to begin playing.</p>
       <br />

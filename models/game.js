@@ -19,10 +19,9 @@ const gameSchema = new Schema({
 }, { timestamps: true });
 
 
-// Pre-save hook to add owner to players array
+// Pre-save hook to add owner to the players array
 gameSchema.pre('save', function(next) {
-    // console.log('Pre-save hook triggered for game:', this._id);
-    // console.log(this.players)
+
     // Convert ObjectIds to strings for comparison
     const ownerStr = this.owner.toString();
     const playersStr = this.players.map(player => player.toString());

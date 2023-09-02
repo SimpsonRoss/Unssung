@@ -1,4 +1,5 @@
 // src/pages/GameDetailPage/GameDetailPage.jsx
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -10,8 +11,21 @@ export default function GameDetailPage({ games, setGames }) {
   const [rounds, setRounds] = useState([]);
   const [lastRoundStatus, setLastRoundStatus] = useState(null);
   const [playerInfo, setPlayerNames] = useState({}); 
+  const [isCopied, setIsCopied] = useState(false);  // State for tooltip
 
-  // console.log('game:', game);
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(game.uniqueCode).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+    }).catch(err => {
+      alert('Failed to copy text: ', err);
+    });
+  };
+
+  const handleTextClick = (e) => {
+    const text = e.target.innerText;
+    navigator.clipboard.writeText(text);
+  };
 
 
   useEffect(() => {
@@ -168,10 +182,10 @@ export default function GameDetailPage({ games, setGames }) {
   
 
   return (
-    <div>
+    <div className="container">
       <h1 className='mt-3 mb-3'>{game.title}</h1>
       <hr />
-      <h4 className='mb-4'>Game is {(game.status === 'New') || (game.status === 'InProgress') ? <span className='text-success'>live</span> : <span className='text-danger'>over</span>}</h4>
+      <h4 className='mb-4'>Game is {(game.status === 'New') || (game.status === 'InProgress') ? <span className='text-success1'>live</span> : <span className='text-danger'>over</span>}</h4>
       <section className='mb-4'>
       <h2 className='mb-1'>Rounds: {game.roundCount}</h2>
         { (game.status !== 'Finished') ?
@@ -198,7 +212,7 @@ export default function GameDetailPage({ games, setGames }) {
         <>
           {/* <h4 className='mb-3'>Number of Players: {game.players.length}</h4> */}
           <h4 className='mb-2'>Players:</h4>
-          <h4 className='mb-4'><span className='text-success'>{game.players.map(player => player.name).join(game.players.length > 2 ? ', ' : ' & ')}</span></h4>
+          <h4 className='mb-4'><span className='text-success1'>{game.players.map(player => player.name).join(game.players.length > 2 ? ', ' : ' & ')}</span></h4>
         </>
         :
         <>
@@ -206,14 +220,23 @@ export default function GameDetailPage({ games, setGames }) {
           <p>Share your code with friends. Game's need at least 3 players.</p>
         </>
       }
+
+
       { (game.status === 'New') ?
-      <>
-      <h4 className='mb-2'>Invite code: </h4>
-      <h4 className='mb-4 text-success'>{game.uniqueCode}</h4>
-      {game.status === 'New' && game.players.length > 2 && <button className="btn btn-outline-light" onClick={startGame}>Start game</button>}
-      </>
-      : null
+        <>
+          <h4 className='mb-2'>Invite code: </h4>
+         
+            <h4 className='text-success1 mb-2' onClick={handleTextClick}>{game.uniqueCode}</h4>
+            <button className="btn btn-outline-light" onClick={handleCopyClick}>Copy</button>
+            {isCopied && <p className="mt-2 text-success1">Copied!</p>}
+          <br/>
+          {game.status === 'New' && game.players.length > 2 && <button className="btn btn-outline-light mt-3" onClick={startGame}>Start game</button>}
+        </>
+        : null
       }
+
+
+
       {/* Logic for showing 'Start Round' button */}
       { game.status === 'InProgress' && 
         lastRoundFinished && 
@@ -243,7 +266,7 @@ export default function GameDetailPage({ games, setGames }) {
     {game.status === 'Finished' && (
       <div>
         <h2 className='mt-3 mb-3'>Final scores:</h2>
-        <ol className='list-group'>
+        <ul className='list-group list-unstyled'>
           {sortedPlayers.map(([playerId, score], index) => {
             const place = index + 1;
             const suffix = getNumberSuffix(place);
@@ -258,7 +281,7 @@ export default function GameDetailPage({ games, setGames }) {
               </li>
             );
           })}
-        </ol>
+        </ul>
       </div>
     )}
       <br />

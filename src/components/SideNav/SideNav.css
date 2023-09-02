@@ -1,20 +1,15 @@
-/* .SideNavBox {
-display: flex;
-align-items: stretch;
-} */
 
 #wrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* display: flex; */
-  /* align-items: stretch; */
+
 }
 
 #sidebar {
   min-width: 250px;
   max-width: 250px;
-  background: rgb(26, 25, 25);
+  background: rgb(14, 13, 13);
   min-height: 100vh;
   color: #fff;
   transition: all 0.3s;
@@ -27,9 +22,9 @@ align-items: stretch;
 }
 
 .sidebar-header {
-  color: black;
+  color: white;
   padding: 20px;
-  background: whitesmoke
+  background: rgb(0, 186, 61)
 }
 
 #sidebar ul li a {
@@ -96,6 +91,10 @@ ul ul a {
   color: black !important; 
 }
 
+.text-success1 {
+  color: rgb(0, 186, 61) !important;
+}
+
 
 .Card {
   display: flex;
@@ -105,11 +104,18 @@ ul ul a {
   height: 40vmin;  
   padding: 2vmin;
   background-color: black;
-  border: solid 1px white;  
+  border: solid 1px rgb(0, 186, 61); 
   border-radius: 2vmin;
   margin: 3vmin;
   margin-bottom: 5vmin;
   position: relative; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Card h3 {
+  color: rgb(0, 186, 61) !important;
 }
 
 .Card * {
@@ -132,27 +138,36 @@ ul ul a {
   white-space: nowrap;
 }
 
+.roundContainer {
+  max-width: 100%;
+  width: 100vmin;
+  overflow: hidden;
+
+}
+
 .profilePhoto {
   width: 25vmin;
   height: auto;
   border-radius: 50%;
-  border: solid 1vmin white;
+  border: solid 1vmin rgb(0, 186, 61);
 }
+
 
 hr {
   height: 1.5vmin;
-  border: white solid 1px;
-  background-color: white;
+  border: rgb(0, 186, 61) solid 1px;
+  background-color: rgb(0, 186, 61);
 }
 
 .miniPhoto {
   width: 15vmin;
   height: auto;
   border-radius: 50%;
-  border: solid 2px white;
+  border: solid 2px rgb(0, 186, 61);
   margin: 1vmin;
 }
 
 .hidden {
   display: none !important;
 }
+

@@ -32,8 +32,7 @@ const sessionConfig = {
 
 if (isProduction) {
   sessionConfig.cookie = {
-    secure: true, // Ensure cookies are only sent over HTTPS in production
-    // any other production-only settings
+    secure: true, 
   };
 }
 

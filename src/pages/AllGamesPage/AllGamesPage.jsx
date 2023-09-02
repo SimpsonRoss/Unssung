@@ -1,14 +1,16 @@
 // src/pages/AllGamesPage/AllGamesPage.jsx
 import axios from 'axios';
 import GameCard from "../../components/GameCard/GameCard";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreateGameModal from '../../components/CreateGameModal/CreateGameModal';
 import JoinGameModal from '../../components/JoinGameModal/JoinGameModal';
 
-export default function AllGamesPage({ games, setGames }) {
+export default function AllGamesPage({ games, setGames, user }) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+
 
 
   const handleOpenCreateModal = () => setIsCreateModalOpen(true);
@@ -18,6 +20,25 @@ export default function AllGamesPage({ games, setGames }) {
   const handleCloseJoinModal = () => setIsJoinModalOpen(false);
 
 
+useEffect(() => {
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await axios.get(`/api/users/${user._id}`);
+      setCurrentUser(res.data);
+    } catch (error) {
+      console.error(`Failed to fetch current user: ${error}`);
+    }
+  };
+  fetchCurrentUser();
+}, []);
+
+const handleCreateOrJoinGameClick = (handler) => {
+  if (currentUser && currentUser.spotifyAccessToken) {
+    handler();
+  } else {
+    setErrorMessage("Go to your account page to connect Spotify.");
+  }
+};
 
 
   const handleJoinGame = async (uniqueCode) => {
@@ -64,8 +85,18 @@ export default function AllGamesPage({ games, setGames }) {
       <br />
       
       <div className="w-100">
-  <button className="btn btn-outline-light mt-2 equal-width-button" onClick={handleOpenCreateModal}>Create new game</button>
-  <button className="btn btn-outline-light mt-2 equal-width-button" onClick={handleOpenJoinModal}>Join game</button>
+  <button 
+    className="btn btn-outline-light mt-2 equal-width-button" 
+    onClick={() => handleCreateOrJoinGameClick(handleOpenCreateModal)}
+  >
+    Create new game
+  </button>
+  <button 
+    className="btn btn-outline-light mt-2 equal-width-button" 
+    onClick={() => handleCreateOrJoinGameClick(handleOpenJoinModal)}
+  >
+    Join game
+  </button>
 </div>
 
       <CreateGameModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
