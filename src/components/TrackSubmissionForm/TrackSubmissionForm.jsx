@@ -27,7 +27,8 @@ export default function TrackSubmissionForm({ roundId, userId, onSuccess }) {
 
   return (
     <form className="darkCenter" autoComplete="off" onSubmit={handleSubmit}>
-      <div className="form-floating mt-2">
+      <h4 className='text-light mt-3'>Submit a valid Spotify URL</h4>
+      <div className="form-floating mt-1">
         <input 
           className='form-control mt-2'
           name="songURL"

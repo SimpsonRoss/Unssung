@@ -32,6 +32,10 @@ useEffect(() => {
   fetchCurrentUser();
 }, []);
 
+const handleCreateGame = (newGame) => {
+  setGames([...games, newGame]);
+};
+
 const handleCreateOrJoinGameClick = (handler) => {
   if (currentUser && currentUser.spotifyAccessToken) {
     handler();
@@ -57,8 +61,10 @@ const handleCreateOrJoinGameClick = (handler) => {
     }
   };
 
-  const currentGames = games?.filter(game => game.status === 'New' || game.status === 'InProgress') || [];
-  const finishedGames = games?.filter(game => game.status === 'Finished') || [];
+  const sortByTimestampDesc = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
+
+  const currentGames = games?.filter(game => game.status === 'New' || game.status === 'InProgress').sort(sortByTimestampDesc) || [];
+  const finishedGames = games?.filter(game => game.status === 'Finished').sort(sortByTimestampDesc) || [];
 
   return (
     <div className="container dashContainer">
@@ -99,7 +105,7 @@ const handleCreateOrJoinGameClick = (handler) => {
   </button>
 </div>
 
-      <CreateGameModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
+      <CreateGameModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} onCreateGame={handleCreateGame} />
       <JoinGameModal isOpen={isJoinModalOpen} onClose={handleCloseJoinModal} onJoinGame={handleJoinGame} />
         <br />
         <br />

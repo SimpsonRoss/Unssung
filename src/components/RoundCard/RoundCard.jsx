@@ -53,6 +53,7 @@ export default function RoundCard({ id, idx }) {
     <Link to={`/rounds/${id}`}>
       <div className="Card">
         <h3>Round {round.roundNumber}</h3>
+        <div className='tinyLine'></div>
         <p>Status: {round.status}</p>
         {round.status === 'SongPick' || round.status === 'SongScore' ? 
         <>

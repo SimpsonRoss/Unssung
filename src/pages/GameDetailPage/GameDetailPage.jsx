@@ -31,8 +31,17 @@ export default function GameDetailPage({ games, setGames }) {
   useEffect(() => {
     const fetchPlayerNames = async () => {
       const playerInfo = {};
+
+      if (!game || !game.players) {
+        return;
+      }
+
       for (const player of game.players) {
-        const playerId = player._id;        
+        const playerId = player._id;       
+        if (!playerId) {
+          console.warn("Player ID is undefined");
+          continue;
+        } 
         try {
           const res = await axios.get(`/api/users/${playerId}`);
           if (res.data && res.data.name) {

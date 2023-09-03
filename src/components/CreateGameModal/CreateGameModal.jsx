@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createGame } from '../../utilities/games-api';
 
-export default function CreateGameModal({ isOpen, onClose }) {
+export default function CreateGameModal({ isOpen, onClose, onCreateGame }) {
   const [title, setTitle] = useState("");
   const [roundCount, setRoundCount] = useState(0);
   const [roundDuration, setRoundDuration] = useState(0);
@@ -13,6 +13,9 @@ export default function CreateGameModal({ isOpen, onClose }) {
     try {
       const game = await createGame({ title, roundCount, roundDuration });
       console.log("Game created:", game);
+      if (typeof onCreateGame === 'function') {
+        onCreateGame(game);
+      }
       onClose(); // Close the modal
     } catch (err) {
       console.error("Error creating game:", err);

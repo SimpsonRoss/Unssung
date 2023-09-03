@@ -109,7 +109,7 @@ ul ul a {
   height: 40vmin;  
   padding: 2vmin;
   background-color: black;
-  border: solid 1px rgb(0, 186, 61); 
+  /* border: solid 1px rgb(0, 186, 61);  */
   border-radius: 2vmin;
   margin: 3vmin;
   margin-bottom: 5vmin;
@@ -125,7 +125,9 @@ ul ul a {
   transition: 0.25s;
  }
 
-
+.Card h3 {
+  color: rgb(0, 186, 61);
+}
 
 .Card * {
   margin: .2rem auto; 
@@ -213,4 +215,10 @@ h1 {
   display: inline;
   width: 10vmin;
   height: 9vmin;
+}
+
+.tinyLine {
+  width: 95%;
+  height: .2vmin;
+  background-color: white;
 }
