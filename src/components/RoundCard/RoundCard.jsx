@@ -18,16 +18,21 @@ export default function RoundCard({ id, idx }) {
     fetchRound();
   }, [id]);
 
+  const getStatusPhrase = (status) => {
+    const phrases = {
+      'SongPick': 'Submit a song!',
+      'SongScore': 'Listen & score!',
+      'RevealScore': 'Drumrollllll!',
+      'Finished': 'Completed'
+    };
+    return phrases[status] || 'Unknown Status';
+  };
+
   const getNextDeadline = () => {
     const now = new Date();
     const pickDeadline = new Date(round.songPickDeadline);
     const scoreDeadline = new Date(round.songScoreDeadline);
-    
-    // // No deadline should be displayed if the round status is neither 'SongPick' nor 'SongScore'
-    // if (round.status !== 'SongPick' && round.status !== 'SongScore') {
-    //   return 'None';
-    // }
-  
+
     // Determine which deadline is closest but hasn't passed
     if (round.status === 'SongPick' && pickDeadline > now) {
       return formatDate(pickDeadline);
@@ -54,22 +59,21 @@ export default function RoundCard({ id, idx }) {
       <div className="Card">
         <h3>Round {round.roundNumber}</h3>
         <div className='tinyLine'></div>
-        <p>Status: {round.status}</p>
+        <p>{getStatusPhrase(round.status)}</p>
         {round.status === 'SongPick' || round.status === 'SongScore' ? 
         <>
-        <p>Next deadline:</p>
+        <p>Before deadline -</p>
         <p>{getNextDeadline()}</p>
         </>
         : 
         <>
         {round.status === 'Finished' ?
         <>
-        <p>Winner:</p>
-        <p>{round.winner}</p>
+        <p>{round.winner} won!</p>
         </>
         : 
         <>
-        <p>Scores ready!</p>
+        <p>Scores are ready</p>
         <p>... lets go.</p>
         </>
          }

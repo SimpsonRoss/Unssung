@@ -23,12 +23,12 @@ export default function JoinGameModal({ isOpen, onClose, onJoinGame }) {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content text-white modalStyle">
           <div className="modal-header text-center">
-            <h5 className="modal-title modal-title position-absolute start-50 translate-middle-x">Join Game</h5>
+            <h5 className="modal-title modal-title position-absolute start-50 translate-middle-x">Join game</h5>
             <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
           </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
-              <p>Unique Code</p>
+              <p>Unique code</p>
               <div className="form-floating mb-3">
                 <input 
                   type="text" 

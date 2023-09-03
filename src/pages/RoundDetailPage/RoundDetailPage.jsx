@@ -132,19 +132,19 @@ export default function RoundDetailPage({user}) {
     <div className="container roundContainer">
       <h1 className='mt-3 mb-3'>Round {round.roundNumber} Details</h1>
       <hr />
-      <h4 className='mb-4'>Game: {round.gameTitle}</h4>
-      <h4 className='mb-4'>Status: {round.status}</h4>
+      <h4 className='mb-4'>Game - {round.gameTitle}</h4>
+      {/* <h4 className='mb-4'>Status: {round.status}</h4> */}
       {/* <h4 className='mb-4'>Duration: {round.duration} days</h4> */}
       { round.status === 'SongPick' ?
       <>
-        <h4 className='mb-2'>Deadline to submit song: </h4>
+        <h4 className='mb-2'>Submit your song by </h4>
         <h5>{songPickDeadline.toLocaleString()}</h5>
       </>
       : null 
       }
       { round.status === 'SongScore' ?
       <>
-        <h4 className='mb-2'>Deadline to rate songs: </h4>
+        <h4 className='mb-2'>Submit ratings by </h4>
         <h5>{songScoreDeadline.toLocaleString()}</h5>
       </>
       : null 
@@ -154,7 +154,7 @@ export default function RoundDetailPage({user}) {
         <TrackSubmissionForm roundId={id} userId={user._id} onSuccess={handleSuccessfulSubmit} />
         : 
         <>
-        <h4 className='mt-4 mb-2'>Song submitted:</h4>
+        <h4 className='mt-4 mb-2'>Song submitted</h4>
         {/* COMMENTING OUT WHILST DEBUGGING THE SONG SUBMIT ERROR */}
         {/* <p className='mb-4'><a href={userSubmission.songId} target="_blank" rel="noopener noreferrer">{userSubmission.songId}</a></p> */}
         </>
@@ -190,12 +190,12 @@ export default function RoundDetailPage({user}) {
       }
 
       {
-        (round.status === 'RevealScore') && <button className='btn btn-outline-light mb-4' onClick={revealScores}>Reveal Scores</button>
+        (round.status === 'RevealScore') && <button className='btn btn-outline-light mb-4' onClick={revealScores}>Reveal scores</button>
       }
  {
         (round.status === 'Finished') &&
         <div>
-          <h2 className='mt-2 mb-3'>Final Scores:</h2>
+          <h2 className='mt-2 mb-3'>Final Scores</h2>
           <ul className='list-group list-unstyled'>
           {
             round.trackSubmissions.sort((a, b) => {

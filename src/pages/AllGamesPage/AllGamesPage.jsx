@@ -49,6 +49,9 @@ const handleCreateOrJoinGameClick = (handler) => {
     try {
       const response = await axios.put(`/api/games/join`, { uniqueCode });
       const joinedGame = response.data;
+      console.log('Joined game data:', joinedGame);
+      console.log('Games:', games);
+
       setGames([...games, joinedGame]);
       setErrorMessage("");  // Clear any previous error messages
     } catch (error) {

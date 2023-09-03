@@ -10,4 +10,5 @@ router.put('/:id/update', gamesCtrl.updateGame);
 router.put('/join', gamesCtrl.joinGame);
 
 
+
 module.exports = router;

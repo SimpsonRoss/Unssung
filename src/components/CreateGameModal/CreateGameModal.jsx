@@ -35,22 +35,22 @@ export default function CreateGameModal({ isOpen, onClose, onCreateGame }) {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content text-white modalStyle">
           <div className="modal-header text-center">
-            <h5 className="modal-title modal-title position-absolute start-50 translate-middle-x">Create a New Game</h5>
+            <h5 className="modal-title modal-title position-absolute start-50 translate-middle-x">Create a new game</h5>
             <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
           </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
-              <p>Game Title</p>
+              <p>Game title</p>
               <div className="form-floating mb-3">
                 <input type="text" className="form-control" name="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder='My new game'/>
                 <label>Title</label>
               </div>
-              <p>Number of Rounds</p>
+              <p>Number of rounds</p>
               <div className="form-floating mb-3">
                 <input type="number" className="form-control" name="numRounds" placeholder="Enter number of rounds" value={roundCount} onChange={(e) => setRoundCount(e.target.value)} />
                 <label>Rounds</label>
               </div>
-              <p>Days Per Round</p>
+              <p>Days per round</p>
               <div className="form-floating mb-3">
                 <input type="number" className="form-control" name="daysPerRound" placeholder="Enter days per round" value={roundDuration} onChange={(e) => setRoundDuration(e.target.value)} />
                 <label>Days</label>
@@ -59,7 +59,7 @@ export default function CreateGameModal({ isOpen, onClose, onCreateGame }) {
             </form>
           </div>
           <div className="modal-footer">
-            <button type="submit" className="btn btn-outline-light mx-auto" onClick={handleSubmit}>Create Game</button>
+            <button type="submit" className="btn btn-outline-light mx-auto" onClick={handleSubmit}>Create game</button>
           </div>
         </div>
       </div>

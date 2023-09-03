@@ -27,47 +27,37 @@ export default function GameDetailPage({ games, setGames }) {
     navigator.clipboard.writeText(text);
   };
 
-
-  useEffect(() => {
-    const fetchPlayerNames = async () => {
-      const playerInfo = {};
-
-      if (!game || !game.players) {
-        return;
-      }
-
-      for (const player of game.players) {
-        const playerId = player._id;       
-        if (!playerId) {
-          console.warn("Player ID is undefined");
-          continue;
-        } 
-        try {
-          const res = await axios.get(`/api/users/${playerId}`);
-          if (res.data && res.data.name) {
-            playerInfo[playerId] = { name: res.data.name, avatar: res.data.avatar };
-            // console.log('res.data', res.data)
-            // console.log('res.data.name', res.data.name)
-            // console.log('res.data.avatar', res.data.avatar)
-          }
-        } catch (error) {
-          console.error(`Error fetching info for player ${playerId}: ${error}`);
-        }
-      }
-      setPlayerNames(playerInfo);
-    };
-    
-    if (game && game.players) {
-      fetchPlayerNames();
+  
+useEffect(() => {
+  const fetchPlayerNames = async (game) => {
+    const playerInfo = {};
+    if (!game || !game.players) {
+      return;
     }
-  }, [game]);
-  
-  
+    for (const player of game.players) {
+      const playerId = player._id;       
+      if (!playerId) {
+        console.warn("Player ID is undefined");
+        continue;
+      } 
+      try {
+        const res = await axios.get(`/api/users/${playerId}`);
+        if (res.data && res.data.name) {
+          playerInfo[playerId] = { name: res.data.name, avatar: res.data.avatar };
+        }
+      } catch (error) {
+        console.error(`Error fetching info for player ${playerId}: ${error}`);
+      }
+    }
+    setPlayerNames(playerInfo);
+  };
 
-  useEffect(() => {
-    const fetchedGame = games.find(g => g._id === id);
-    setGame(fetchedGame);
-  }, [games, id]);
+  const fetchedGame = games.find(g => g._id === id);
+  if (fetchedGame) {
+    fetchPlayerNames(fetchedGame);
+  }
+  setGame(fetchedGame);
+}, [games, id]);
 
   useEffect(() => {
     const fetchAllRounds = async () => {
@@ -108,12 +98,13 @@ export default function GameDetailPage({ games, setGames }) {
 
   const lastRoundFinished = !lastRoundStatus || lastRoundStatus === 'Finished';
 
-  // console.log('lastRoundFinished' + lastRoundFinished)
   const updateGame = async (action, data) => {
     try {
       const updatedGame = await axios.put(`/api/games/${id}/update`, {action, data});
-      const updatedGames = games.map(g => (g._id === id ? updatedGame.data : g));
-      setGames(updatedGames);
+      if (updatedGame.data) {
+        const updatedGames = games.map(g => (g._id === id ? updatedGame.data : g));
+        setGames(updatedGames);
+      }
     } catch (error) {
       console.error(`Error updating game: ${error}`);
     }
@@ -166,14 +157,14 @@ export default function GameDetailPage({ games, setGames }) {
         gameId: game._id,
         players: game.players,
       });
-      // Temporarily calling this line below, just to clear the 'Start Round' button
-      updateGame('start', {}); 
-      setRounds([...rounds, newRound.data]);
+      if (newRound.data) {
+        await updateGame('start', {});  // Added await here
+        setRounds([...rounds, newRound.data]);
+      }
     } catch (error) {
       console.error(`Error starting new round: ${error}`);
     }
   };
-
   const getNumberSuffix = (n) => {
     const j = n % 10;
     const k = n % 100;
@@ -196,7 +187,7 @@ export default function GameDetailPage({ games, setGames }) {
       <hr />
       <h4 className='mb-4'>Game is {(game.status === 'New') || (game.status === 'InProgress') ? <span className='text-success1'>live</span> : <span className='text-danger'>over</span>}</h4>
       <section className='mb-4'>
-      <h2 className='mb-1'>Rounds: {game.roundCount}</h2>
+      <h2 className='mb-1'>Rounds - {game.roundCount}</h2>
         { (game.status !== 'Finished') ?
         <>
         <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundCount(-1)} disabled={game.roundCount <= 1}>- 1 Round</button>
@@ -206,7 +197,7 @@ export default function GameDetailPage({ games, setGames }) {
         }
       </section>
       <section className='mb-2'>
-      <h2 className='mb-1'>Days per round: {game.roundDuration}</h2>
+      <h2 className='mb-1'>Days per round - {game.roundDuration}</h2>
         { (game.status !== 'Finished') ?
         <>
         <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundDuration(-1)} disabled={game.roundDuration <= 1}>- 1 Day</button>
@@ -220,12 +211,12 @@ export default function GameDetailPage({ games, setGames }) {
       {game.players.length > 1 ?
         <>
           {/* <h4 className='mb-3'>Number of Players: {game.players.length}</h4> */}
-          <h4 className='mb-2'>Players:</h4>
+          <h4 className='mb-2'>Players</h4>
           <h4 className='mb-4'><span className='text-success1'>{game.players.map(player => player.name).join(game.players.length > 2 ? ', ' : ' & ')}</span></h4>
         </>
         :
         <>
-          <h4 className='mb-2'>Players:</h4>
+          <h4 className='mb-2'>Players</h4>
           <p>Share your code with friends. Game's need at least 3 players.</p>
         </>
       }
@@ -233,7 +224,7 @@ export default function GameDetailPage({ games, setGames }) {
 
       { (game.status === 'New') ?
         <>
-          <h4 className='mb-2'>Invite code: </h4>
+          <h4 className='mb-2'>Invite code </h4>
          
             <h4 className='text-success1 mb-2' onClick={handleTextClick}>{game.uniqueCode}</h4>
             <button className="btn btn-outline-light" onClick={handleCopyClick}>Copy</button>
@@ -274,7 +265,7 @@ export default function GameDetailPage({ games, setGames }) {
     {/* Show the sorted players */}
     {game.status === 'Finished' && (
       <div>
-        <h2 className='mt-3 mb-3'>Final scores:</h2>
+        <h2 className='mt-3 mb-3'>Final scores</h2>
         <ul className='list-group list-unstyled'>
           {sortedPlayers.map(([playerId, score], index) => {
             const place = index + 1;
