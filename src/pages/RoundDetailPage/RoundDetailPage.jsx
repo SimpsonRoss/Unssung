@@ -134,18 +134,18 @@ export default function RoundDetailPage({user}) {
       <hr />
       <h4 className='mb-4'>Game: {round.gameTitle}</h4>
       <h4 className='mb-4'>Status: {round.status}</h4>
-      <h4 className='mb-4'>Duration: {round.duration} days</h4>
+      {/* <h4 className='mb-4'>Duration: {round.duration} days</h4> */}
       { round.status === 'SongPick' ?
       <>
         <h4 className='mb-2'>Deadline to submit song: </h4>
-        <h4>{songPickDeadline.toLocaleString()}</h4>
+        <h5>{songPickDeadline.toLocaleString()}</h5>
       </>
       : null 
       }
       { round.status === 'SongScore' ?
       <>
         <h4 className='mb-2'>Deadline to rate songs: </h4>
-        <h4>{songScoreDeadline.toLocaleString()}</h4>
+        <h5>{songScoreDeadline.toLocaleString()}</h5>
       </>
       : null 
       }
@@ -154,7 +154,7 @@ export default function RoundDetailPage({user}) {
         <TrackSubmissionForm roundId={id} userId={user._id} onSuccess={handleSuccessfulSubmit} />
         : 
         <>
-        <h4 className='mb-2'>Song submitted:</h4>
+        <h4 className='mt-4 mb-2'>Song submitted:</h4>
         {/* COMMENTING OUT WHILST DEBUGGING THE SONG SUBMIT ERROR */}
         {/* <p className='mb-4'><a href={userSubmission.songId} target="_blank" rel="noopener noreferrer">{userSubmission.songId}</a></p> */}
         </>

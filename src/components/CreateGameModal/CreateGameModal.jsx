@@ -29,8 +29,8 @@ export default function CreateGameModal({ isOpen, onClose }) {
         }
       }}
     >
-      <div className="modal-dialog">
-        <div className="modal-content bg-dark text-white">
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content text-white modalStyle">
           <div className="modal-header text-center">
             <h5 className="modal-title modal-title position-absolute start-50 translate-middle-x">Create a New Game</h5>
             <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>

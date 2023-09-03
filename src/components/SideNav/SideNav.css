@@ -22,6 +22,9 @@
 }
 
 .sidebar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   color: white;
   padding: 20px;
   background: rgb(0, 186, 61)
@@ -35,6 +38,8 @@
 #sidebar ul li a:hover {
   color: black;
   background: #fff;
+  transition: 0.3s;
+
 }
 
 
@@ -112,11 +117,15 @@ ul ul a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  background: linear-gradient(112.1deg, rgb(27, 49, 39) 30.4%, rgb(37, 69, 57) 70.2%);
 }
 
-.Card h3 {
-  color: rgb(0, 186, 61) !important;
-}
+.Card:hover {
+  transform: scale(1.02);
+  transition: 0.25s;
+ }
+
+
 
 .Card * {
   margin: .2rem auto; 
@@ -127,6 +136,8 @@ ul ul a {
   white-space: nowrap;
   max-width: 100%;
 }
+
+
 
 .equal-width-button {
   width: calc(50% - 2vmin); 
@@ -171,3 +182,35 @@ hr {
   display: none !important;
 }
 
+.modalStyle {
+  /* background-color: rgb(14, 13, 13) !important; */
+  background: linear-gradient(112.1deg, rgb(12, 22, 18) 50.4%, rgb(30, 55, 46) 70.2%);
+
+  /* border: solid 1vmin rgb(0, 186, 61) !important; */
+  box-shadow: 0 0 50vmin black !important;
+  margin-bottom: 15% !important;
+}
+
+.navBarIcons:hover {
+  transform: scale(1.1);
+  transition: 0.25s;
+ }
+
+button {
+  transition: 0.3s !important;
+}
+
+.modal-title {
+  color: rgb(0, 186, 61) !important;
+}
+
+h1 {
+  color: rgb(0, 186, 61) !important;
+}
+
+
+.iconLogo {
+  display: inline;
+  width: 10vmin;
+  height: 9vmin;
+}
