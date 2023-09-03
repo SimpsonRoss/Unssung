@@ -1,6 +1,6 @@
 # Unssung - the best tracks you've never heard
 
-![Unssung Logo](https://github.com/SimpsonRoss/trkR8/blob/main/public/unssung-logo.png)
+![Example of Unssung Branding](https://github.com/SimpsonRoss/trkR8/blob/main/public/branding.png)
 
 <a name="readme-top"></a>
 
@@ -151,8 +151,6 @@ Here's how it used to look:
 - I'm lucky enough to have some willing testers and so we'll be playing the game a lot, to identify key improvement areas and continue building the backlog
 - I'll build extensive unit tests, so the codebase is easier for collaborators to get involved.
 - I'll deploy to the production domain.
-
-![Example of Unssung Branding](https://github.com/SimpsonRoss/trkR8/blob/main/public/branding.png)
 
 ## Mistakes / Bugs
 
