@@ -71,8 +71,6 @@ To build Unssung I used the following tools:
 - Games need a minimum of 3 players to begin
   - If you need other accounts to view the functionality (lee@lee.com p/w lee & jin@jin.com p/w jin)
 
-![My Trips Page](https://github.com/SimpsonRoss/itinerary-app/blob/main/public/images/my-trips.png)
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
