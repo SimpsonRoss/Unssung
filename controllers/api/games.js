@@ -38,7 +38,7 @@ async function fetchUserGames(req, res) {
         { owner: req.user._id },
         { players: req.user._id }
       ]
-    }).populate('owner').populate('players');  // Removed the 'allRoundsArray' and 'currentRound' parts
+    }).populate('owner').populate('players');
 
     // console.log("fetchUserGames - games = ", games);
 

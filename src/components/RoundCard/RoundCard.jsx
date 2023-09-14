@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
-import './RoundCard.css';
 
 export default function RoundCard({ id, idx }) {
   const [round, setRound] = useState(null);

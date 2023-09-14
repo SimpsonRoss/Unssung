@@ -2,19 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { getUser } from '../../utilities/users-service';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { fetchUserGames } from '../../utilities/games-api';
 import './App.css';
 import AuthPage from '../AuthPage/AuthPage';
 import AllGamesPage from '../AllGamesPage/AllGamesPage';
 import ProfilePage from '../ProfilePage/ProfilePage';
-import Dash from '../DashPage/DashPage';
 import { Link } from "react-router-dom";
 import * as userService from "../../utilities/users-service";
 import '../../components/SideNav/SideNav.css';
 
-import SideNav from '../../components/SideNav/SideNav';
-import QuickNav from '../../components/QuickNav/QuickNav';
+// import QuickNav from '../../components/QuickNav/QuickNav';
 import GameDetailPage from '../GameDetailPage/GameDetailPage';
 import RoundDetailPage from '../RoundDetailPage/RoundDetailPage';
 
@@ -68,6 +66,7 @@ export default function App() {
     return greetings[randomIndex];
   };
   
+  console.log('user', user);
 
   return (
     <>
@@ -85,22 +84,22 @@ export default function App() {
         </div>
 
         <ul className="list-group list-group-flush list-unstyled px-2">
-          <p>What's on your unplayedlist?</p>
+          <p className='mt-2'>What's on your unplayedlist?</p>
           <br/>
-          <li className='list-group-item-dark mb-2 sidebarCollapse'><Link className="custom-hover" to={"/games"} > 
+          <li className='list-group-item-dark mb-2'><Link className="custom-hover sidebarCollapse" to={"/games"} > 
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="rgb(0, 186, 61)" className="bi bi-house" viewBox="0 0 16 16">
               <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
             </svg>
             &nbsp;&nbsp;
             Games Dashboard</Link></li>
-          <li className='list-group-item-dark mb-2 sidebarCollapse'><Link className="custom-hover" to={"/account"}>
+          <li className='list-group-item-dark mb-2'><Link className="custom-hover sidebarCollapse" to={"/account"}>
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="rgb(0, 186, 61)" className="bi bi-person-circle" viewBox="0 0 16 16">
               <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
               <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
             </svg>
           &nbsp;&nbsp;
             Account Page</Link></li>
-          <li className='list-group-item-dark mb-2'><Link className="custom-hover" to="" onClick={handleLogOut}>
+          <li className='list-group-item-dark mb-2'><Link className="custom-hover sidebarCollapse" to="" onClick={handleLogOut}>
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="rgb(0, 186, 61)" className="bi bi-box-arrow-left" viewBox="0 0 16 16">
   <path fillRule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
   <path fillRule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>

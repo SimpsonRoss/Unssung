@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import './GameCard.css';
 
 export default function GameCard(props) {
 
@@ -22,8 +21,8 @@ export default function GameCard(props) {
           <h3>{props.title}</h3>
           <div className='tinyLine'></div>
           <p>{getGameStatusPhrase()}</p>
-          <p>Rounds - {props.rounds}</p>
-          <p>Players - {props.players.length}</p>
+          <p>{props.rounds} Rounds</p>
+          <p>{props.players.length} Players</p>
         </div>
       </Link>
     </>
