@@ -2,13 +2,24 @@ import React, { useState } from 'react';
 
 export default function JoinGameModal({ isOpen, onClose, onJoinGame }) {
   const [uniqueCode, setUniqueCode] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // To store any error messages
   const modalClass = isOpen ? 'modal fade show d-block' : 'modal fade';
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onJoinGame(uniqueCode);
+  
+    const trimmedCode = uniqueCode.trim(); // Remove white spaces at both ends
+  
+    if (trimmedCode.length !== 9) {  // 9 characters long as per your generateUniqueCode function
+      setErrorMessage("Code must be 9 characters long.");
+      return;  // Stop execution
+    }
+    
+    setErrorMessage(''); // Clear any previous error messages
+    onJoinGame(trimmedCode);  // Pass the trimmed code
     onClose();
   };
+  
 
   return (
     <div 
@@ -39,6 +50,7 @@ export default function JoinGameModal({ isOpen, onClose, onJoinGame }) {
                 />
                 <label>Code</label>
               </div>
+              {errorMessage && <p className="text-danger">{errorMessage}</p>} {/* Display error message if any */}
               <p>Enter the unique code to join a game.</p>
             </form>
           </div>

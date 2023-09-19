@@ -1,6 +1,5 @@
-/* * {
-  font-family: 'Open Sans', sans-serif !important;
-} */
+
+/* ========================== GLOBAL STYLES ========================== */
 
 main {
   background-color: black;
@@ -10,7 +9,6 @@ main {
 .light {
   color: white;
 }
-
 
 .darkCenter {
   display: flex;
@@ -34,54 +32,35 @@ a {
 }
 
 
-/* .MainApp {
-  height: 100%;
-  display: grid;
-  grid-template-columns: 2fr 6fr;
-  grid-template-rows: 1fr;
-  background-color: black;
+
+
+
+/* ========================== MOBILE STYLES ========================== */
+
+@media (max-width: 768px) {
+  .authMargin {
+    margin: 10% 10%;
+  }
 }
 
-.MainApp aside {
-  display: flex;
-  flex-direction: column;
-  justify-content: top;
-  align-items: left;
-  margin: 3vmin 2vmin;
-  gap: 2rem ;
+
+/* ========================== TABLET STYLES ========================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
 
 }
 
-.MainApp section {
-  display: flex;
-  flex-direction: column;
-  justify-content: top;
-  align-items: center;
-  margin: 3vmin 2vmin;
-  background-color: grey;
-  border-radius: 2vmin;
+
+/* ========================== DESKTOP STYLES ========================== */
+
+@media (min-width: 1024px) {
+  .authMargin {
+    margin: 5% 35%;
+  }
+
 }
 
-.Dash-Container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
-}
 
-.Dash-Row {
-  display: flex;
-  flex-direction: row;
-  margin: 1vmin;
-  gap: 1vmin;
-  overflow-x: auto;
-  white-space: nowrap;
-  max-width: 100%;  
-}
 
-.Dash-Row > * {
-  flex-shrink: 0;  
-}
-.Footer {
-  color: white;
-} */
+
+

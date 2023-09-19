@@ -25,7 +25,7 @@ export default function LoginForm({ setUser }) {
       const user = await usersService.login(credentials);
       setUser(user);
     } catch {
-      setError('Log In Failed - Try Again');
+      setError('Log in failed. Please try again.');
     }
   }
 
@@ -48,8 +48,10 @@ export default function LoginForm({ setUser }) {
 
         </form>
       </div>
-      {error ? <p className="error-message">&nbsp;{error}</p> : null}
+      {error ? <p className="error-message mt-2 text-danger">&nbsp;{error}</p> : null}
       {/* <p className="error-message">&nbsp;{error}</p> */}
     </div>
   );
 }
+
+

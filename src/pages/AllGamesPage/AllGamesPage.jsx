@@ -2,6 +2,7 @@
 import axios from 'axios';
 import GameCard from "../../components/GameCard/GameCard";
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import CreateGameModal from '../../components/CreateGameModal/CreateGameModal';
 import JoinGameModal from '../../components/JoinGameModal/JoinGameModal';
 
@@ -11,38 +12,58 @@ export default function AllGamesPage({ games, setGames, user }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
 
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const modal = queryParams.get('modal');
 
   const handleOpenCreateModal = () => setIsCreateModalOpen(true);
   const handleCloseCreateModal = () => setIsCreateModalOpen(false);
-
+  
   const handleOpenJoinModal = () => setIsJoinModalOpen(true);
   const handleCloseJoinModal = () => setIsJoinModalOpen(false);
+  
+  useEffect(() => {
+    if (currentUser && currentUser.spotifyAccessToken) {
+      console.log('currentUser:', currentUser);
+      console.log('currentUser.spotifyAccessToken:', currentUser.spotifyAccessToken);
+      
+      if (modal === 'createGame') {
+        handleOpenCreateModal();
+      }
 
+      if (modal === 'joinGame') {
+        handleOpenJoinModal();
+      }
+      // Clear the error message if conditions are met
+      setErrorMessage("");
+    } else if (!currentUser || !currentUser.spotifyAccessToken) {
+      setErrorMessage("Go to your account page to connect Spotify.");
+    }
+  }, [location, currentUser]);
 
-useEffect(() => {
-  const fetchCurrentUser = async () => {
-    try {
-      const res = await axios.get(`/api/users/${user._id}`);
-      setCurrentUser(res.data);
-    } catch (error) {
-      console.error(`Failed to fetch current user: ${error}`);
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const res = await axios.get(`/api/users/${user._id}`);
+        setCurrentUser(res.data);
+      } catch (error) {
+        console.error(`Failed to fetch current user: ${error}`);
+      }
+    };
+    fetchCurrentUser();
+  }, []);
+
+  const handleCreateGame = (newGame) => {
+    setGames([...games, newGame]);
+  };
+
+  const handleCreateOrJoinGameClick = (handler) => {
+    if (currentUser && currentUser.spotifyAccessToken) {
+      handler();
+    } else {
+      setErrorMessage("Go to your account page to connect Spotify.");
     }
   };
-  fetchCurrentUser();
-}, []);
-
-const handleCreateGame = (newGame) => {
-  setGames([...games, newGame]);
-};
-
-const handleCreateOrJoinGameClick = (handler) => {
-  if (currentUser && currentUser.spotifyAccessToken) {
-    handler();
-  } else {
-    setErrorMessage("Go to your account page to connect Spotify.");
-  }
-};
 
 
   const handleJoinGame = async (uniqueCode) => {
@@ -73,18 +94,18 @@ const handleCreateOrJoinGameClick = (handler) => {
     <div className="container dashContainer">
       {/* <h1>Your games</h1> */}
       <h1 className='mt-3 mb-3'>Your games</h1>
-      <hr />
+      <div className='customHr'></div>
    
       {/* New and In Progress Games */}
-      <h2 className='mt-5'>Current games</h2>
+      <h2 className='carouselTitle'>Current games</h2>
       <div className="game-row d-flex flex-row flex-nowrap">
         {currentGames.length > 0 ? currentGames.map((game, idx) => (
           <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
         )) : <p>No current games</p>}
       </div>
-      <br />
+    
       {/* Finished Games */}
-      <h2>Past games</h2>
+      <h2 className='carouselTitle'>Past games</h2>
       <div className="game-row d-flex flex-row flex-nowrap">
         {finishedGames.length > 0 ? finishedGames.map((game, idx) => (
           <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />

@@ -184,10 +184,10 @@ useEffect(() => {
   return (
     <div className="container">
       <h1 className='mt-3 mb-3'>{game.title}</h1>
-      <hr />
+      <div className='customHr'></div>
       <h4 className='mb-4'>Game is {(game.status === 'New') || (game.status === 'InProgress') ? <span className='text-success1'>live</span> : <span className='text-danger'>over</span>}</h4>
       <section className='mb-4'>
-      <h2 className='mb-1'>Rounds - {game.roundCount}</h2>
+      <h2 className='mb-2'>{game.roundCount} rounds</h2>
         { (game.status !== 'Finished') ?
         <>
         <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundCount(-1)} disabled={game.roundCount <= 1}>- 1 Round</button>
@@ -197,7 +197,7 @@ useEffect(() => {
         }
       </section>
       <section className='mb-2'>
-      <h2 className='mb-1'>Days per round - {game.roundDuration}</h2>
+      <h2 className='mb-2'>{game.roundDuration} days per round</h2>
         { (game.status !== 'Finished') ?
         <>
         <button className="btn btn-outline-light equal-width-button mt-2" onClick={() => updateRoundDuration(-1)} disabled={game.roundDuration <= 1}>- 1 Day</button>

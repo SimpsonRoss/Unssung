@@ -131,14 +131,15 @@ export default function RoundDetailPage({user}) {
   return (
     <div className="container roundContainer">
       <h1 className='mt-3 mb-3'>Round {round.roundNumber} Details</h1>
-      <hr />
+      <div className='customHr'></div>
+      <div className='fiftyWidth'>
       <h4 className='mb-4'>Game - {round.gameTitle}</h4>
       {/* <h4 className='mb-4'>Status: {round.status}</h4> */}
       {/* <h4 className='mb-4'>Duration: {round.duration} days</h4> */}
       { round.status === 'SongPick' ?
       <>
-        <h4 className='mb-2'>Submit your song by </h4>
-        <h5>{songPickDeadline.toLocaleString()}</h5>
+        <h4 className='mb-2 text-warning'>Submit your song by </h4>
+        <h5 className='text-warning'>{songPickDeadline.toLocaleString()}</h5>
       </>
       : null 
       }
@@ -154,7 +155,8 @@ export default function RoundDetailPage({user}) {
         <TrackSubmissionForm roundId={id} userId={user._id} onSuccess={handleSuccessfulSubmit} />
         : 
         <>
-        <h4 className='mt-4 mb-2'>Song submitted</h4>
+        <h4 className='mt-4 mb-1'>Song submitted</h4>
+        <p className='mb-2'>Waiting for all players to submit.</p>
         {/* COMMENTING OUT WHILST DEBUGGING THE SONG SUBMIT ERROR */}
         {/* <p className='mb-4'><a href={userSubmission.songId} target="_blank" rel="noopener noreferrer">{userSubmission.songId}</a></p> */}
         </>
@@ -227,6 +229,7 @@ export default function RoundDetailPage({user}) {
 
         </div>
       }
+      </div>
     <br />
     <br />
     <br />

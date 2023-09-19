@@ -106,17 +106,20 @@ export default function ProfilePage({ user, setUser }) {
   return (
     <>
       
+
+    
+      <h1 className='mt-3 mb-3'>{user.name}</h1>
+      <div className='customHr'></div>
+
       {user.spotifyAccessToken ? 
       <>
-      <br />
-      <img className="profilePhoto" src={user.avatar} alt={`${user.name}'s Avatar`} />
-      <br />
+    
+      <img className="profilePhoto mb-3" src={user.avatar} alt={`${user.name}'s Avatar`} />
+      
       </>
       :
       null}
-    
-      <h1 className='mt-3 mb-3'>{user.name}</h1>
-      <hr />
+
       <h4 className='mb-3'>{user.email}</h4>
 
       {!user.spotifyAccessToken ? 

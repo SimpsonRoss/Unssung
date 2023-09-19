@@ -65,7 +65,7 @@ export default class SignUpForm extends Component {
             <button className="btn btn-outline-light" type="submit" disabled={disable}>SIGN UP</button>
           </form>
         </div>
-        {this.state.error ? <p className="error-message">&nbsp;{this.state.error}</p> : null}
+        {this.state.error ? <p className="mt-2 error-message text-danger">&nbsp;{this.state.error}</p> : null}
       </div>
     );
   }
