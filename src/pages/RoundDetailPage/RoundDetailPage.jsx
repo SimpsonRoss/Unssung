@@ -129,10 +129,10 @@ export default function RoundDetailPage({user}) {
   const songScoreDeadline = new Date(round.songScoreDeadline);
 
   return (
-    <div className="container roundContainer">
+    <div className="">
       <h1 className='mt-3 mb-3'>Round {round.roundNumber} Details</h1>
       <div className='customHr'></div>
-      <div className='fiftyWidth'>
+      <div className=''>
       <h4 className='mb-4'>Game - {round.gameTitle}</h4>
       {/* <h4 className='mb-4'>Status: {round.status}</h4> */}
       {/* <h4 className='mb-4'>Duration: {round.duration} days</h4> */}
@@ -166,7 +166,7 @@ export default function RoundDetailPage({user}) {
         (round.status !== 'SongPick') && (!savedPlaylist) && <button className='btn btn-outline-light mt-2 mb-4' onClick={savePlaylistToSpotify}>Save playlist to Spotify</button>
       }
       <br />
-
+      <div className='spotifyPlayer'>
       { (round.status !== 'SongPick') && (savedPlaylist) && <iframe
         title="Spotify Embed: Recommendation Playlist "
         src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
@@ -177,16 +177,18 @@ export default function RoundDetailPage({user}) {
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"
       />}
-
+      </div>
       {
         (round.status === 'SongScore') ?
         !scoreSubmitted ? 
+          <div className='songScoreForm d-flex'>
           <SongScoreForm 
             trackSubmissions={round.trackSubmissions} 
             userId={user._id} 
             roundId={id} 
             onSuccess={handleScoreSubmitSuccess} 
           />
+          </div>
           : <p className='text-success1'>Scores submitted!</p> 
         : null
       }

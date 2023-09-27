@@ -1,6 +1,13 @@
 
 /* ========================== GLOBAL STYLES ========================== */
 
+.songScoreForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 
 #wrapper {
   min-height: 100vh;
@@ -107,7 +114,6 @@ ul ul a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: linear-gradient(112.1deg, rgb(27, 49, 39) 30.4%, rgb(37, 69, 57) 70.2%);
 }
 
 .Card:hover {
@@ -151,11 +157,24 @@ ul ul a {
 
 .profilePhoto {
   width: 25vmin;
-  height: auto;
+  height: 25vmin;
   border-radius: 50%;
   border: solid 1vmin rgb(0, 186, 61);
+  object-fit: cover;
+  object-position: center; /* Center the image within the frame */
+  overflow: hidden; /* In case something spills out */
 }
 
+.miniPhoto {
+  width: 15vmin;
+  height: 15vmin;
+  border-radius: 50%;
+  border: solid 2px rgb(0, 186, 61);
+  margin: 1vmin;
+  object-fit: cover;
+  object-position: center; /* Center the image within the frame */
+  overflow: hidden; /* In case something spills out */
+}
 
 hr {
   height: 1.5vmin;
@@ -165,18 +184,13 @@ hr {
 
 .customHr {
   width: 100%;
+  max-width: 100%;  
   height: .5vmin;
   background-color: rgb(0, 186, 61);
-  margin-bottom: 3vmin;
+  margin: 3vmin auto;
 }
 
-.miniPhoto {
-  width: 15vmin;
-  height: auto;
-  border-radius: 50%;
-  border: solid 2px rgb(0, 186, 61);
-  margin: 1vmin;
-}
+
 
 .hidden {
   display: none !important;
@@ -234,16 +248,21 @@ h1 {
     width: 40vmin;  
     height: 40vmin;  
     padding: 2vmin;
+    background: linear-gradient(112.1deg, rgb(27, 49, 39) 30.4%, rgb(37, 69, 57) 70.2%);
   }
 
   .profilePhoto {
     width: 25vmin;
+    height: 25vmin;
   }
 
   .carouselTitle {
     margin-top: 5vmin;
   }
   
+  .inputBox {
+    width: 100% !important;
+  }
 
 }
 
@@ -267,10 +286,12 @@ h1 {
     width: 22vmin;  
     height: 22vmin;  
     padding: 2vmin;
+    background: linear-gradient(112.1deg, rgb(10, 35 , 20) 30.4%, rgb(20, 60, 48) 70.2%);
   }
 
   .profilePhoto {
     width: 15vmin;
+    height: 15vmin;
     border: solid .6vmin rgb(0, 186, 61);
   }
 
@@ -281,6 +302,36 @@ h1 {
 
   .fiftyWidth {
     width: 50%;;
+  }
+
+  .container {
+    flex-grow: 1;
+
+  }
+
+  .allGamesButtons {
+
+  }
+
+  .spotifyPlayer {
+    padding: 0 50vmin;
+  }
+
+  .equal-width-button {
+    width: 25%;
+    margin-right: 1%;
+  }
+
+  .inputBox {
+    width: 20% !important;
+  }
+
+  .songScoreForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
 
 

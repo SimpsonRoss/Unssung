@@ -182,7 +182,7 @@ useEffect(() => {
   
 
   return (
-    <div className="container">
+    <div className="">
       <h1 className='mt-3 mb-3'>{game.title}</h1>
       <div className='customHr'></div>
       <h4 className='mb-4'>Game is {(game.status === 'New') || (game.status === 'InProgress') ? <span className='text-success1'>live</span> : <span className='text-danger'>over</span>}</h4>

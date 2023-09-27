@@ -21,7 +21,7 @@ export default function AllGamesPage({ games, setGames, user }) {
   
   const handleOpenJoinModal = () => setIsJoinModalOpen(true);
   const handleCloseJoinModal = () => setIsJoinModalOpen(false);
-  
+
   useEffect(() => {
     if (currentUser && currentUser.spotifyAccessToken) {
       console.log('currentUser:', currentUser);
@@ -91,7 +91,7 @@ export default function AllGamesPage({ games, setGames, user }) {
   const finishedGames = games?.filter(game => game.status === 'Finished').sort(sortByTimestampDesc) || [];
 
   return (
-    <div className="container dashContainer">
+    <div className="dashContainer">
       {/* <h1>Your games</h1> */}
       <h1 className='mt-3 mb-3'>Your games</h1>
       <div className='customHr'></div>
@@ -114,15 +114,15 @@ export default function AllGamesPage({ games, setGames, user }) {
 
       <br />
       
-      <div className="w-100">
+      <div className="allGamesButtons">
   <button 
-    className="btn btn-outline-light mt-2 equal-width-button" 
+    className="btn btn-outline-light equal-width-button" 
     onClick={() => handleCreateOrJoinGameClick(handleOpenCreateModal)}
   >
     Create new game
   </button>
   <button 
-    className="btn btn-outline-light mt-2 equal-width-button" 
+    className="btn btn-outline-light equal-width-button" 
     onClick={() => handleCreateOrJoinGameClick(handleOpenJoinModal)}
   >
     Join game

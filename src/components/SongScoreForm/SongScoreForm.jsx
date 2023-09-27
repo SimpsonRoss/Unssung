@@ -65,7 +65,7 @@ export default function SongScoreForm({ trackSubmissions, userId, roundId, onSuc
 
         return (
           <div key={songId}>
-            <a href={songId} target="_blank" rel="noopener noreferrer">{songId}</a>
+            <a href={songId} target="_blank" rel="noopener noreferrer">Open song on Spotify</a>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div className="dropdown mt-2" style={{ width: 'calc(50% - 0.5vmin)' }} data-bs-theme="dark">
                 <button className="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
