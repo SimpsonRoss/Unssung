@@ -14,6 +14,10 @@ require('./config/cronJobs'); // Importing the cron jobs
 const isProduction = process.env.NODE_ENV === 'production';
 
 console.log('isProduction:', isProduction);
+if (isProduction && !process.env.REDIS_TLS_URL) {
+  console.error('REDIS_TLS_URL is not set. Exiting.');
+  process.exit(1);
+}
 
 /// testing this out
 // console.log('REDIS_URL:', process.env.REDIS_URL);
@@ -28,9 +32,13 @@ console.log('isProduction:', isProduction);
 // });
 ///// testing
 
-const client = process.env.REDIS_URL ? 
-  redis.createClient(process.env.REDIS_URL) : // Use the Heroku Redis URL in production
-  redis.createClient({ host: '127.0.0.1', port: 6379 }); // Use local Redis in development
+const client = isProduction ? 
+  redis.createClient({
+    url: process.env.REDIS_TLS_URL,
+    tls: {}
+  }) :
+  redis.createClient({ host: '127.0.0.1', port: 6379 });
+
 
 client.on('connect', () => {
   console.log('Redis client connected');
