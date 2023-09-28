@@ -15,8 +15,16 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 console.log('isProduction:', isProduction);
 
-const client = redis.createClient(process.env.REDIS_URL) // Use the Heroku Redis URL in production
+/// testing this out
+const url = require('url');
+const redisURL = url.parse(process.env.REDIS_URL);
 
+const client = redis.createClient({
+  port: redisURL.port,
+  host: redisURL.hostname,
+  password: redisURL.auth.split(":")[1]
+});
+///// testing
 
 // const client = isProduction ? 
 //   redis.createClient(process.env.REDIS_URL) : // Use the Heroku Redis URL in production
