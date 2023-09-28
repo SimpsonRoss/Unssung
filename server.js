@@ -13,6 +13,8 @@ require('./config/cronJobs'); // Importing the cron jobs
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+console.log('isProduction:', isProduction);
+
 const client = isProduction ? 
   redis.createClient(process.env.REDIS_URL) : // Use the Heroku Redis URL in production
   redis.createClient({ host: '127.0.0.1', port: 6379 }); // Use local Redis in development
