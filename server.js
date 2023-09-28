@@ -16,19 +16,21 @@ const isProduction = process.env.NODE_ENV === 'production';
 console.log('isProduction:', isProduction);
 
 /// testing this out
-const url = require('url');
-const redisURL = url.parse(process.env.REDIS_URL);
+// console.log('REDIS_URL:', process.env.REDIS_URL);
 
-const client = redis.createClient({
-  port: redisURL.port,
-  host: redisURL.hostname,
-  password: redisURL.auth.split(":")[1]
-});
+// const url = require('url');
+// const redisURL = url.parse(process.env.REDIS_URL);
+
+// const client = redis.createClient({
+//   port: redisURL.port,
+//   host: redisURL.hostname,
+//   password: redisURL.auth.split(":")[1]
+// });
 ///// testing
 
-// const client = isProduction ? 
-//   redis.createClient(process.env.REDIS_URL) : // Use the Heroku Redis URL in production
-//   redis.createClient({ host: '127.0.0.1', port: 6379 }); // Use local Redis in development
+const client = process.env.REDIS_URL ? 
+  redis.createClient(process.env.REDIS_URL) : // Use the Heroku Redis URL in production
+  redis.createClient({ host: '127.0.0.1', port: 6379 }); // Use local Redis in development
 
 client.on('connect', () => {
   console.log('Redis client connected');
