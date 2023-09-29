@@ -7,9 +7,9 @@ const session = require('express-session');
 const RedisStore = require("connect-redis").default;
 const redis = require('redis');
 
-require('dotenv').config(); // Connect to db after the dotenv
+require('dotenv').config();
 require('./config/database');
-require('./config/cronJobs'); // Importing the cron jobs
+require('./config/cronJobs');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -18,19 +18,6 @@ if (isProduction && !process.env.REDIS_TLS_URL) {
   console.error('REDIS_TLS_URL is not set. Exiting.');
   process.exit(1);
 }
-
-/// testing this out
-// console.log('REDIS_URL:', process.env.REDIS_URL);
-
-// const url = require('url');
-// const redisURL = url.parse(process.env.REDIS_URL);
-
-// const client = redis.createClient({
-//   port: redisURL.port,
-//   host: redisURL.hostname,
-//   password: redisURL.auth.split(":")[1]
-// });
-///// testing
 
 const client = isProduction ? 
   redis.createClient({
@@ -41,6 +28,7 @@ const client = isProduction ?
   }) :
   redis.createClient({ host: '127.0.0.1', port: 6379 });
 
+console.log(`Connecting to Redis at ${process.env.REDIS_URL || '127.0.0.1:6379'}`);
 
 client.on('connect', () => {
   console.log('Redis client connected');
@@ -62,7 +50,6 @@ client.on('end', () => {
   console.log('Redis connection closed');
 });
 
-// Async function to set up Express app after Redis connection
 (async () => {
   await client.connect();
   console.log('Redis client connected');
@@ -72,15 +59,13 @@ client.on('end', () => {
   const sessionConfig = {
     store: new RedisStore({ client }),
     secret: process.env.SESSION_SECRET,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
   };
-
 
   app.use(logger('dev'));
   app.use(express.json());
 
-  // Dynamic CORS Configuration
   const corsOrigin = isProduction ? 'https://trkr8-9a9586e5bb16.herokuapp.com' : 'http://localhost:3000';
   app.use(cors({
     origin: corsOrigin,
@@ -90,6 +75,7 @@ client.on('end', () => {
   if (isProduction) {
     sessionConfig.cookie = {
       secure: true,
+      maxAge: 1000 * 60 * 60 * 24 // 1 day
     };
   }
 
@@ -97,18 +83,21 @@ client.on('end', () => {
   app.use(favicon(path.join(__dirname, 'build', 'favicon.ico')));
   app.use(express.static(path.join(__dirname, 'build')));
 
-  // Middleware to verify token and assign user object of payload to req.user.
   app.use(require('./config/checkToken'));
 
-  // API routes
   app.use('/api/users', require('./routes/api/users'));
   app.use('/api/spotify', require('./routes/api/spotify'));
   app.use('/api/games', require('./routes/api/games'));
   app.use('/api/rounds', require('./routes/api/rounds'));
 
-  // "catch-all" route
   app.get('/*', function(req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
+
+  // Error handling middleware
+  app.use((err, req, res, next) => {
+    console.error('Express error:', err.stack);
+    res.status(500).send('Internal Server Error');
   });
 
   const port = process.env.PORT || 5001;
