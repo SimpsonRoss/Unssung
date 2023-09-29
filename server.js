@@ -34,7 +34,7 @@ if (isProduction && !process.env.REDIS_TLS_URL) {
 
 const client = isProduction ? 
   redis.createClient({
-    url: 'rediss://:p941aaeb31a4425f3aede03eca9af27cea993f0025726d3a72018eb0027aab2de@ec2-52-202-215-144.compute-1.amazonaws.com:22740',
+    url: process.env.REDIS_URL,
     tls: {
       rejectUnauthorized: false
     }
