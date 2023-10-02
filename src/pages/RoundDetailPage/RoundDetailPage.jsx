@@ -97,22 +97,15 @@ export default function RoundDetailPage({user}) {
   };
 
   const savePlaylistToSpotify = async () => {
-    // Dynamically collect the track URIs from the round's submissions
     const tracksUrls = round.trackSubmissions.map(submission => submission.songId);
-    const tracksUri = tracksUrls.map(url => { 
-      const urlParts = url.split('/');
-      const trackId = urlParts[4].split('?')[0];
-      return `spotify:track:${trackId}`;
-    });
-    console.log(round);
 
     const playlistInfo = {
-      tracksUri,
+      tracksUrls,  // We're sending raw URLs now
       roundNumber: round.roundNumber,
       gameTitle: round.gameTitle,
       songScoreDeadline: round.songScoreDeadline
     };
-    
+
     try {
       const response = await axios.post(`${apiURLBackend}/api/spotify/create-playlist-api`, playlistInfo, { withCredentials: true });
       setPlaylistId(response.data.playlistId);
@@ -121,7 +114,8 @@ export default function RoundDetailPage({user}) {
     } catch (error) {
       console.error('Round Detail Page - Failed to create playlist:', error);
     }
-  };
+};
+
 
   // Convert timestamps to Date objects
   const startDate = new Date(round.createdAt);

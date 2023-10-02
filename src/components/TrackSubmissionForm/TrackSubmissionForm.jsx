@@ -7,8 +7,10 @@ export default function TrackSubmissionForm({ roundId, userId, onSuccess }) {
 
   const validateURL = (url) => {
     const pattern1 = /^https:\/\/open\.spotify\.com\/track\/[a-zA-Z0-9]{22}\?si=[a-zA-Z0-9]+$/;
-    const pattern2 = /^https:\/\/spotify\.link\/[a-zA-Z0-9]+$/;
-    return pattern1.test(url) || pattern2.test(url);
+    // const pattern2 = /^https:\/\/spotify\.link\/[a-zA-Z0-9]+$/;
+    return pattern1.test(url) 
+    // || pattern2.test(url)
+    ;
   };
 
   const handleSubmit = async (e) => {
@@ -46,7 +48,7 @@ export default function TrackSubmissionForm({ roundId, userId, onSuccess }) {
       </div>
       <br />
       <button className='btn btn-outline-light mb-4 inputBox' type="submit">Submit</button>
-      {!isValid && <p className='px-4 text-warning'>Please submit a song using a valid Spotify URL format.</p>}
+      {!isValid && <p className='px-4 text-warning'>Please submit a song using a valid Spotify URL format (from Spotify Desktop or Web App).</p>}
     </form>
   );
 }

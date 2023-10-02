@@ -227,16 +227,54 @@ async function getCurrentUserProfile(req, res) {
 }
 
 
+async function resolveShortSpotifyLink(url) {
+  if (!url.startsWith('https://spotify.link/')) {
+      return url;
+  }
+
+  try {
+      const response = await axios.get(url, { 
+          maxRedirects: 5, 
+          validateStatus: function (status) {
+              // Accept any status code less than 500, as we want to get the final URL even if it's an error page
+              return status < 500;
+          } 
+      });
+      return response.request.res.responseUrl || url;
+  } catch (error) {
+      console.error('Error resolving short Spotify link:', error);
+      return url;  // Return the original URL if there's an error.
+  }
+}
+
+
 async function createPlaylistAPI(req, res) {
 
-  const { tracksUri, roundNumber, gameTitle, songScoreDeadline } = req.body;
+    const { tracksUrls, roundNumber, gameTitle, songScoreDeadline } = req.body;
 
-  // Guard rails incase the request body is missing parameters
-  if (!tracksUri || !roundNumber || !gameTitle || !songScoreDeadline) {
-    console.error("Missing parameters in request body");
-    res.status(400).send("Missing parameters in request body.");
-    return;
-  }
+    // Guard rails in case the request body is missing parameters
+    if (!tracksUrls || !roundNumber || !gameTitle || !songScoreDeadline) {
+        console.error("Missing parameters in request body");
+        res.status(400).send("Missing parameters in request body.");
+        return;
+    }
+
+    // Process each URL and resolve short Spotify links
+    const resolvedUrlsPromises = tracksUrls.map(async url => await resolveShortSpotifyLink(url));
+    const resolvedUrls = await Promise.all(resolvedUrlsPromises);
+
+    // Extract track IDs from the resolved URLs
+    const tracksUri = resolvedUrls.map(url => {
+      const urlParts = url.split('/');
+      if (urlParts.length < 5) {
+          console.error("Unexpected URL format:", url);
+          return null;  // or handle this error differently
+      }
+      const trackId = urlParts[4].split('?')[0];
+      return `spotify:track:${trackId}`;
+  }).filter(Boolean);  // Remove any null values
+  
+
   // Guard rails incase the user is not logged in or the user is not found
   const user = await User.findById(req.session.userId);
   if (!user) {
