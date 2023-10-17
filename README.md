@@ -104,13 +104,19 @@ To create a mobile first music sharing game with robust game logic, intuitive us
 
 ## ERD
 
+My original ERD I made during the planning phase. In the end I didn't need a Song model, and I regretted not nesting the Rounds within the Game model for ease.
+
 ![Unssung ERD](https://github.com/SimpsonRoss/trkR8/blob/main/public/ERD.jpeg)
 
 ## Wireframe
 
+I decided to make a wireframe so I could visualise where all my react components would sit on both mobile and desktop. Although I didn't get round to fully building out the Desktop version, I was glad I took a mobile first approach and optimised for mobile usage.
+
 ![Unssung Wireframe](https://github.com/SimpsonRoss/trkR8/blob/main/public/wireframe.png)
 
 ## Component Hierarchy
+
+Drawing out this component hierarchy helped me get an idea for how I'd share state efficiently, before beginning to template out my react project's files and folders.
 
 ![React Component Hierarchy Planning](https://github.com/SimpsonRoss/trkR8/blob/main/public/react-hierarchy.png)
 
