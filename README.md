@@ -234,5 +234,6 @@ These resources helped me greatly in the completion of my game:
 - [Bootstrap](https://getbootstrap.com/)
 - [Trello](https://trello.com/)
 - [Photopea](https://www.photopea.com/)
+- [Redis](https://redis.io/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
