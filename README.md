@@ -31,7 +31,7 @@ Unssung gamifies the sharing of music between friends. Players compete to find t
 
 The game takes all the submitted tracks from each round and makes a playlist directly on the user's Spotify profile, so that they're able to listen to the tracks in Unssung in the mini player, or on Spotify directly.
 
-![Playlist created by Unssung](https://github.com/SimpsonRoss/trkR8/blob/main/public/create-playlist.png)
+![Playlist created by Unssung](https://github.com/SimpsonRoss/trkR8/blob/main/public/created-playlist.png)
 
 ![Spotify player in Unssung](https://github.com/SimpsonRoss/trkR8/blob/main/public/playlist-in-app.png)
 
