@@ -16,6 +16,8 @@
     <li><a href="#wireframe">Wireframe</a></li>
     <li><a href="#inspiration">Inspiration</a></li>
     <li><a href="#biggest-challenge">Biggest Challenge</a></li>
+    <li><a href="#key-learnings">Key Learnings</a></li>
+    <li><a href="#wins">Wins</a></li>
     <li><a href="#next-steps">Next Steps</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -25,7 +27,13 @@
 
 ## About
 
-Unssung gamifies the sharing of music between friends. Players compete to find the best unknown tracks, that their friends love and share them to earn points and win games.
+Unssung gamifies the sharing of music between friends. Players compete to find the best tracks that their friends have never heard, sharing them to earn points and win games.
+
+The game takes all the submitted tracks from each round and makes a playlist directly on the user's Spotify profile, so that they're able to listen to the tracks in Unssung in the mini player, or on Spotify directly.
+
+![Playlist created by Unssung](https://github.com/SimpsonRoss/trkR8/blob/main/public/create-playlist.png)
+
+![Spotify player in Unssung](https://github.com/SimpsonRoss/trkR8/blob/main/public/playlist-in-app.png)
 
 **Built With**
 
@@ -44,7 +52,7 @@ To build Unssung I used the following tools:
 
 ## Website
 
-<strong><p><a href="https://itinera-6ae652d21473.herokuapp.com/">Click to view the Unssung website (Optimised for mobile viewing)</a></p></strong>
+<strong><p><a href="https://trkr8-9a9586e5bb16.herokuapp.com/">Click to view the Unssung website (Optimised for mobile viewing)</a></p></strong>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -69,7 +77,9 @@ To build Unssung I used the following tools:
 - Create a game using by hitting the 'Create new game' button
 - Invite friends by copying your unique code and sharing it with others
 - Games need a minimum of 3 players to begin
-  - If you need other accounts to view the functionality (lee@lee.com p/w lee & jin@jin.com p/w jin)
+  - If you need other accounts to view the functionality
+    - email: test@test.com / password: test
+    - email test1@test.com / password: test1
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -77,10 +87,12 @@ To build Unssung I used the following tools:
 
 ## Project Brief
 
+This was my final project in my General Assembly bootcamp. The criteria I had to satisfy was as follows:
+
 - Working MERN stack app.
 - Token-based authentication implemented (sign-up, login & logout)
 - Navigation dynamically responds to the login status of the user.
-- Authorization is implemented that restricts access to CUD functionality from anonymous users
+- Authorization is implemented that restricts access to create/update/delete functionality from anonymous users.
 - Have a consistent and polished user interface.
 - App has full Create/Read/Update/Delete and/or consumes an API, has admin user functionality or real time communication.
 - Be deployed online via Heroku
@@ -88,7 +100,7 @@ To build Unssung I used the following tools:
 ## Planning
 
 **Aim:**
-To create a mobile first music sharing game with robust game logic, intuitive user flow, and a tie in with the Spotify API for ease of listening.
+To create a mobile first music sharing game with robust game logic, intuitive user flow, and a tie in the Spotify API to source information and create playlists.
 
 ## ERD
 
@@ -133,8 +145,10 @@ Here's how it used to look:
 
 ## Biggest Challenge
 
+- **Deployment**
+
 - **Conditionally displaying components for the game**
-  The sheer amount of conditionally visible components required for this game were overhelming for 9 days turnaround. The games and rounds each have multiple status's and then each user's page much look different depending on what action they've taken. It took a lot of testing to find unexpected behaviours and ensure the pages were concise without blocking integral user actions.
+  The large amount of conditionally visible components required for this game were overhelming for 9 days turnaround. The games and rounds each have multiple status's and then each user's page must look different depending on what action they've taken. It took a lot of testing to find unexpected behaviours and ensure the pages were concise without blocking integral user actions.
 - **Implementing Spotify API**
   It was the first time I'd implemented an API that required credentials not only at a site level, but also access and refresh tokens at a user level. Building in guardrails to check for these and refesh tokens when needed was time consuming, and took a lot of hours in Postman running API checks.
 - **Handling user state and use effect**
@@ -142,8 +156,24 @@ Here's how it used to look:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Key Learnings
+
+- **How to build an original full stack React app**
+  I'd built a few other full stack apps with React, during my course at General Assembly but this was the first time I'd had to architect an entire original React app, from concept, designing the component hierarchy and use of State across them.
+- **How to troubleshoot issues with API calls**
+  Setting up the Spotify API was something that took me quite a long time to figure out. I had to store each individual user's Access token and Refresh Access token in the user model and build functions to check these tokens and update them when needed. Learning to use Postman and being able to check token validity, and what was being returned by Spotify was invaluable and helped me persevere and get it working.
+
+## Wins
+
+-**Successfully using the Spotify API to improve the game**
+When I first considered this as an option I wasn't even sure that the functionality was possible, so learning how to do this and taking the submitted tracks, parsing the URLs to retrieve the URIs and then using these to populate a new playlist in the users account was a big achievement. I used template literals to populate the track title and description, and add in the deadline dates for the Round.
+
+-**Building a complex original game in a short timeframe**
+One of the hardest parts of the project was the game logic, and understanding the user flow and what information and functionality was needed to create an intuitive experience. It took a large amount of testing, gathering user feedback and implementing changes. I had to be very critical about what would be prioritised in the short time I had, and optimise for playability.
+
 ## Next Steps
 
+- I'll use the spotify API to load the album artwork and details for the submitted tracks, to improve the UX.
 - The app needs to be made Desktop and Tablet responsive.
 - I'm looking to release this game live, so I'll continue to work on implementing some nice-to-have features and getting it fully production ready.
 - I'm lucky enough to have some willing testers and so we'll be playing the game a lot, to identify key improvement areas and continue building the backlog
@@ -153,10 +183,20 @@ Here's how it used to look:
 ## Mistakes / Bugs
 
 - **Using session storage to hold user ID**
-  This caused me a lot of headaches when trying to deploy, as it wasn't a scalable solution for a game where multiple players could be playing at one time.
+  This caused me a lot of headaches when trying to deploy, as it wasn't a scalable solution for a game where multiple players could be playing at one time. I've since used Redis to fix this, but it needs further testing.
 
-- **Bugs**
-There's a few bugs to iron out with song submissions and with player names showing in the games detail page.
+- **Player names not showing on the Game detail page**
+  When the Game detail page loads it doesn't show the player names at first, and instead needs to be reloaded. I've attempted to use async/await to remedy this, but I'm yet to solve the issue.
+
+- **Spotify player not rendering fully in the Heroku deploy**
+  Currently the Spotify player isn't rendering all the playlist details in the live deploy of the site. It works fine locally, so I need to dig into this further and investigate the API calls in Postman.
+
+- **No default avatar image**
+  If the user is missing an avatar image then it shows as a broken image link, so I'll need to add in a default avatar image for these scenarios.
+
+- **Submitting Spotify short links**
+  It's not currrenty possible to submit the short links Spotfy provides via the mobile app. Unfortunately they don't contain the track URI and therefore I've stuggled to parse them into something I can add to a playlist. This is something I need to investigate further.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->

@@ -59,7 +59,7 @@ export default function SongScoreForm({ trackSubmissions, userId, roundId, onSuc
   return (
     <form onSubmit={handleSubmit}>
       <h3>Score songs</h3>
-      <p className='text-success1'>Give each song a unique score from 1 to {trackSubmissions.length - 1}. <br />Mark whether you knew the song or not.</p>
+      <p className='text-success1'>Mark whether you knew the song or not.<br />Give each song a unique score from 1 to {trackSubmissions.length - 1}.<br/>The higher the number, the higher the score.</p>
       {trackSubmissions.map(({ songId, player }) => {
         if (player.toString() === userId.toString()) return null;
 

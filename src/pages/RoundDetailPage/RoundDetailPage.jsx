@@ -144,16 +144,19 @@ export default function RoundDetailPage({user}) {
       </>
       : null 
       }
-      {
-        (!userHasSubmitted && !submissionSuccess) ? 
-        <TrackSubmissionForm roundId={id} userId={user._id} onSuccess={handleSuccessfulSubmit} />
-        : 
-        <>
-        <h4 className='mt-4 mb-1'>Song submitted</h4>
-        <p className='mb-2'>Waiting for all players to submit.</p>
-        {/* COMMENTING OUT WHILST DEBUGGING THE SONG SUBMIT ERROR */}
-        {/* <p className='mb-4'><a href={userSubmission.songId} target="_blank" rel="noopener noreferrer">{userSubmission.songId}</a></p> */}
-        </>
+      { 
+        round.status === 'SongPick' ? (
+          !userHasSubmitted && !submissionSuccess ? 
+          <TrackSubmissionForm roundId={id} userId={user._id} onSuccess={handleSuccessfulSubmit} />
+          : 
+          <>
+            <h4 className='mt-4 mb-1'>Song submitted</h4>
+            <p className='mb-2'>Waiting for all players to submit.</p>
+            {/* COMMENTING OUT WHILST DEBUGGING THE SONG SUBMIT ERROR */}
+            {/* <p className='mb-4'><a href={userSubmission.songId} target="_blank" rel="noopener noreferrer">{userSubmission.songId}</a></p> */}
+          </>
+        ) 
+        : null 
       }
 
       {

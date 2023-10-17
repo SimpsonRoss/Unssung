@@ -9,6 +9,12 @@
   width: 100%;
 }
 
+.center-text {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 #wrapper {
   min-height: 100vh;
   display: flex;

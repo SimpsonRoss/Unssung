@@ -95,22 +95,22 @@ export default function AllGamesPage({ games, setGames, user }) {
       {/* <h1>Your games</h1> */}
       <h1 className='mt-3 mb-3'>Your games</h1>
       <div className='customHr'></div>
-   
-      {/* New and In Progress Games */}
-      <h2 className='carouselTitle'>Current games</h2>
-      <div className="game-row d-flex flex-row flex-nowrap">
+      
+    {/* New and In Progress Games */}
+    <h2 className='carouselTitle'>Current games</h2>
+    <div className="game-row d-flex flex-row flex-nowrap">
         {currentGames.length > 0 ? currentGames.map((game, idx) => (
-          <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
-        )) : <p>No current games</p>}
-      </div>
-    
-      {/* Finished Games */}
-      <h2 className='carouselTitle'>Past games</h2>
-      <div className="game-row d-flex flex-row flex-nowrap">
+            <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
+        )) : <div className="center-text"><p>No current games</p></div>}
+    </div>
+
+    {/* Finished Games */}
+    <h2 className='carouselTitle'>Past games</h2>
+    <div className="game-row d-flex flex-row flex-nowrap">
         {finishedGames.length > 0 ? finishedGames.map((game, idx) => (
-          <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
-        )) : <p>No finished games</p>}
-      </div>
+            <GameCard title={game.title} status={game.status} rounds={game.roundCount} id={game._id} players={game.players} key={idx} />
+        )) : <div className="center-text"><p>No finished games</p></div>}
+    </div>
 
       <br />
       

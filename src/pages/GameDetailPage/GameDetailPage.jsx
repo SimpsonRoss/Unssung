@@ -212,7 +212,7 @@ useEffect(() => {
         <>
           {/* <h4 className='mb-3'>Number of Players: {game.players.length}</h4> */}
           <h4 className='mb-2'>Players</h4>
-          <h4 className='mb-4'><span className='text-success1'>{game.players.map(player => player.name).join(game.players.length > 2 ? ', ' : ' & ')}</span></h4>
+          <h4 className='mb-4'><span className='text-success1'>{game.players.map(player => player.name).join(game.players.length > 3 ? ', ' : ' & ')}</span></h4>
         </>
         :
         <>
