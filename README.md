@@ -162,7 +162,7 @@ Here's how it used to look:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Key Learnings
+## Key Learnings
 
 - **How to build an original full stack React app**
   I'd built a few other full stack apps with React, during my course at General Assembly but this was the first time I'd had to architect an entire original React app, from concept, designing the component hierarchy and use of State across them.
