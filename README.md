@@ -152,11 +152,14 @@ Here's how it used to look:
 ## Biggest Challenge
 
 - **Deployment**
+  I had multiple hurdles to jump when deploying to Heroku. I was using express sessions to store data, and then it became apparent this wouldn't be suitable for an app that needed to be used my multiple users at once and at scale, so I had to learn about Redis and implement this as a more scalable data store. I still have some kinks to work out with the Spotify API, and lots of testing to do before I'd be confident to release this game.
 
 - **Conditionally displaying components for the game**
   The large amount of conditionally visible components required for this game were overhelming for 9 days turnaround. The games and rounds each have multiple status's and then each user's page must look different depending on what action they've taken. It took a lot of testing to find unexpected behaviours and ensure the pages were concise without blocking integral user actions.
+
 - **Implementing Spotify API**
   It was the first time I'd implemented an API that required credentials not only at a site level, but also access and refresh tokens at a user level. Building in guardrails to check for these and refesh tokens when needed was time consuming, and took a lot of hours in Postman running API checks.
+
 - **Handling user state and use effect**
   Working in react for the first time was a challenging experience, and working with props, state and use effect took some getting used to. For a long time I didn't know what was going to refresh with or without a hard page refresh.
 
@@ -166,16 +169,17 @@ Here's how it used to look:
 
 - **How to build an original full stack React app**
   I'd built a few other full stack apps with React, during my course at General Assembly but this was the first time I'd had to architect an entire original React app, from concept, designing the component hierarchy and use of State across them.
+
 - **How to troubleshoot issues with API calls**
   Setting up the Spotify API was something that took me quite a long time to figure out. I had to store each individual user's Access token and Refresh Access token in the user model and build functions to check these tokens and update them when needed. Learning to use Postman and being able to check token validity, and what was being returned by Spotify was invaluable and helped me persevere and get it working.
 
 ## Wins
 
--**Successfully using the Spotify API to improve the game**
-When I first considered this as an option I wasn't even sure that the functionality was possible, so learning how to do this and taking the submitted tracks, parsing the URLs to retrieve the URIs and then using these to populate a new playlist in the users account was a big achievement. I used template literals to populate the track title and description, and add in the deadline dates for the Round.
+- **Successfully using the Spotify API to improve the game**
+  When I first considered this as an option I wasn't even sure that the functionality was possible, so learning how to do this and taking the submitted tracks, parsing the URLs to retrieve the URIs and then using these to populate a new playlist in the users account was a big achievement. I used template literals to populate the track title and description, and add in the deadline dates for the Round.
 
--**Building a complex original game in a short timeframe**
-One of the hardest parts of the project was the game logic, and understanding the user flow and what information and functionality was needed to create an intuitive experience. It took a large amount of testing, gathering user feedback and implementing changes. I had to be very critical about what would be prioritised in the short time I had, and optimise for playability.
+- **Building a complex original game in a short timeframe**
+  One of the hardest parts of the project was the game logic, and understanding the user flow and what information and functionality was needed to create an intuitive experience. It took a large amount of testing, gathering user feedback and implementing changes. I had to be very critical about what would be prioritised in the short time I had, and optimise for playability.
 
 ## Next Steps
 
